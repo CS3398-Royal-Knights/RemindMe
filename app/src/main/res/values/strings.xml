@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">RemindMe</string>
-    <string name="enter_prompt">Enter a task you need to get done</string>
+    <string name="enter_prompt">Enter a task</string>
     <string name="add">Add</string>
 </resources>

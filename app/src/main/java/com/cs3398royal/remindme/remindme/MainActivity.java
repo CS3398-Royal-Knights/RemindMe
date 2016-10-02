@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ import static com.cs3398royal.remindme.remindme.R.id.button;
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
-    public ArrayList<String> list = new ArrayList<>();
-    public ArrayAdapter<String> adapter;
+    private ArrayList<String> list = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private EditText textBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addItem(view);
+                mListView.setSelection(mListView.getAdapter().getCount()-1);
             }
 
 
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addItem (View view){
-        adapter.add("Add something by pressing the button");
+        textBox = (EditText) findViewById(R.id.editText);
+        String item = textBox.getText().toString();
+        adapter.add(item);
+        textBox.setText("");
     }
 }
