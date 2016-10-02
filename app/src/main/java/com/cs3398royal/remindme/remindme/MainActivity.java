@@ -25,10 +25,6 @@ public class MainActivity extends AppCompatActivity {
         //associates mListView with the list view in the XML
         mListView = (ListView) findViewById(R.id.to_do_list_view);
 
-        //array filled with dummy values to be displayed - only temporary
-       //String [] toDoList = {"1st Item To Do", "2nd Item To Do", "3rd Item To Do", "4th Item To Do", "5th Item To Do", "6th Item To Do",
-        //       "7th Item To Do", "8th Item To Do", "9th Item To Do", "10th Item To Do", "11th Item To Do", "12th Item To Do"};
-
         ArrayList<String> list = new ArrayList<>();
         list.add("something");
         list.add("something else");
