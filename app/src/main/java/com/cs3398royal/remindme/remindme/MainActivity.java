@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.app.FragmentTransaction;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         //an ArrayAdapter basically converts an array into a list that can then populate a listView
+        //This adapter is explicitly for the navigation drawer
         adapter = new ArrayAdapter<String>(this, R.layout.nav_drawer_list_item, list);
         mDrawerList.setAdapter(adapter);
         //Set up drawer item click listener
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         TaskListFragment taskList = new TaskListFragment();
 
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction.add(R.id.content_frame, taskList);
         transaction.commit();
