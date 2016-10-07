@@ -6,16 +6,20 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import static com.cs3398royal.remindme.remindme.R.id.imageButton;
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private ArrayList<String> list = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Task> list = new ArrayList<>();
     private EditText textBox;
+    TaskListAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(testTask3);
 
         //an ArrayAdapter basically converts an array into a list that can then populate a listView
-        TaskListAdapter adapter = new TaskListAdapter(this, R.layout.list_item, list);
+        adapter = new TaskListAdapter(this, R.layout.list_item, list);
         mListView.setAdapter(adapter);
 
 
@@ -49,12 +53,16 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
     }
 
     public void addItem (View view){
         textBox = (EditText) findViewById(R.id.editText);
         String item = textBox.getText().toString();
-        adapter.add(item);
+        Task task = new Task("000", item);
+        adapter.add(task);
         textBox.setText("");
     }
+
+
 }

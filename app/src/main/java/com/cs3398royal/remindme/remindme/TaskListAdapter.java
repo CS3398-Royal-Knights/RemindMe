@@ -4,14 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 /**
  * Created by Brandon on 10/6/2016.
+ * edited 10/7/16 - Brandon
  */
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
@@ -24,7 +27,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         tasks = objects;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).
@@ -37,6 +40,16 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox);
         cb.setText(task.getTaskName());
 
+        ImageButton rmBtn = (ImageButton)convertView.findViewById(R.id.imageButton);
+        rmBtn.setTag(position);
+        rmBtn.setOnClickListener(new AdapterView.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                tasks.remove(position);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
     }
 
