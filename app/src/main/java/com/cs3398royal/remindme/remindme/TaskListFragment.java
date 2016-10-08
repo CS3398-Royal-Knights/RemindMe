@@ -23,7 +23,7 @@ public class TaskListFragment extends ListFragment {
 
     Button addButton;
     EditText textBox;
-    ArrayAdapter<String> adapter;
+    TaskListAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,16 +46,16 @@ public class TaskListFragment extends ListFragment {
 
         //Create ArrayList for items to be added to task list
         //String right now, in the future probably Item class
-        ArrayList<String> taskList = new ArrayList<>();
+        ArrayList<Task> taskList = new ArrayList<>();
         //Need to implement our own ArrayAdapter to take Item class and do custom ItemRow
         EditText textBox;
         //Populate list with something to test
-        taskList.add("Test Item 1");
-        taskList.add("Test Item 3");
-        taskList.add("Test Item 2");
+        taskList.add(new Task("0", "Test Item 1"));
+        taskList.add(new Task("1", "Test Item 1"));
+        taskList.add(new Task("2", "Test Item 1"));
 
         //create array adapter, getActivity returns the current activity
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, taskList);
+        adapter = new TaskListAdapter(getActivity(), android.R.layout.simple_list_item_1, taskList);
         //Have to set list adapter by calling ListFragment.setListAdapter()
         super.setListAdapter(adapter);
 
@@ -65,7 +65,9 @@ public class TaskListFragment extends ListFragment {
 
     public void addItem (View view){
         String item = textBox.getText().toString();
-        adapter.add(item);
+        //000 is ID placeholder until proper ID generation can be implemented
+        Task task = new Task("000", item);
+        adapter.add(task);
         textBox.setText("");
     }
 
