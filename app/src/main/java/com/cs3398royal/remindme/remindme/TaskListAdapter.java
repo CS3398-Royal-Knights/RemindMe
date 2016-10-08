@@ -1,12 +1,14 @@
 package com.cs3398royal.remindme.remindme;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -39,6 +41,19 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         //taskText.setText(task.getTaskName());
         CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox);
         cb.setText(task.getTaskName());
+        //cb.setPaintFlags(cb.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked)
+                    buttonView.setPaintFlags(buttonView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                else
+                    buttonView.setPaintFlags(buttonView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+            }
+        });
 
         ImageButton rmBtn = (ImageButton)convertView.findViewById(R.id.imageButton);
         rmBtn.setTag(position);
