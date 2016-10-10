@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         list.add(testTask2);
         list.add(testTask3);
 
-        //an ArrayAdapter basically converts an array into a list that can then populate a listView
         adapter = new TaskListAdapter(this, R.layout.list_item, list);
         mListView.setAdapter(adapter);
 

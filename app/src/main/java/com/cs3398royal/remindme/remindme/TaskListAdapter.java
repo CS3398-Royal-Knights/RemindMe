@@ -36,27 +36,33 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     inflate(R.layout.list_item, parent, false);
         }
 
-        Task task = tasks.get(position);
-        //TextView taskText = (TextView) convertView.findViewById(R.id.taskText);
-        //taskText.setText(task.getTaskName());
+        final Task task = tasks.get(position);
         CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox);
         cb.setText(task.getTaskName());
-        //cb.setPaintFlags(cb.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
 
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
-                if (isChecked)
+
+
+                if (isChecked) {
+                    task.setCheck(true);
                     buttonView.setPaintFlags(buttonView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                else
+                }
+                else {
+                    task.setCheck(false);
                     buttonView.setPaintFlags(buttonView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                }
 
             }
         });
 
+        cb.setChecked(task.isChecked());
+
         ImageButton rmBtn = (ImageButton)convertView.findViewById(R.id.imageButton);
-        rmBtn.setTag(position);
+        //rmBtn.setTag(position);
         rmBtn.setOnClickListener(new AdapterView.OnClickListener()
         {
             public void onClick(View v)
