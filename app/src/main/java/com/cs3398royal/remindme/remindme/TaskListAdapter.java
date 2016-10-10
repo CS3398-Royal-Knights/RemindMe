@@ -33,7 +33,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).
-                    inflate(R.layout.list_item, parent, false);
+                    inflate(R.layout.task_list_item, parent, false);
         }
 
         Task task = tasks.get(position);
@@ -49,6 +49,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             {
                 if (isChecked)
                     buttonView.setPaintFlags(buttonView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                //TODO: Maybe make delete button only visible when checkbox is checked
                 else
                     buttonView.setPaintFlags(buttonView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 

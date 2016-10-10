@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingBottom="3dp"
+    android:layout_height="wrap_content">
+
+    <!--This is the image that will be used for the header of the navigation drawer
+        This isn't a necessary thing, but it would be pretty cool to have the app icon
+        in the navigation drawer, we need to add the source-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"/>
+
+
+</LinearLayout>
