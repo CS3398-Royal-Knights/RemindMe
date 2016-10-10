@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize views
         mDrawerRecyclerList = (RecyclerView) findViewById(R.id.left_drawer);
+        mDrawerRecyclerList.addItemDecoration(new SimpleDividerItemDecoration(this, null, false, true));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //Initialize ArrayList of Strings
