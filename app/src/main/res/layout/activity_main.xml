@@ -17,4 +17,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textSize="45sp" />
+    <ListView
+        android:id="@+id/to_do_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
 </RelativeLayout>
