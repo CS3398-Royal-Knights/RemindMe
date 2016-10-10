@@ -51,8 +51,8 @@ public class TaskListFragment extends ListFragment {
         EditText textBox;
         //Populate list with something to test
         taskList.add(new Task("0", "Test Item 1"));
-        taskList.add(new Task("1", "Test Item 1"));
-        taskList.add(new Task("2", "Test Item 1"));
+        taskList.add(new Task("1", "Test Item 2"));
+        taskList.add(new Task("2", "Test Item 3"));
 
         //create array adapter, getActivity returns the current activity
         adapter = new TaskListAdapter(getActivity(), android.R.layout.simple_list_item_1, taskList);
@@ -66,9 +66,11 @@ public class TaskListFragment extends ListFragment {
     public void addItem (View view){
         String item = textBox.getText().toString();
         //000 is ID placeholder until proper ID generation can be implemented
-        Task task = new Task("000", item);
-        adapter.add(task);
-        textBox.setText("");
+        if(item.length() != 0) {
+            Task task = new Task("000", item);
+            adapter.add(task);
+            textBox.setText("");
+        }
     }
 
 }
