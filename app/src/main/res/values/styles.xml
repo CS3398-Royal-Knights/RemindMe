@@ -11,5 +11,4 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
     </style>
-
 </resources>
