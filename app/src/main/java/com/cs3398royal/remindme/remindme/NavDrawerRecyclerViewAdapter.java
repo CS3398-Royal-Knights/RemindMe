@@ -73,6 +73,11 @@ public class NavDrawerRecyclerViewAdapter extends RecyclerView.Adapter<NavDrawer
             *       based on the unique identifier of the item clicked in
             *       nav drawer
             * */
+
+            //  Jake: Quick way to switch to the calendar view, currently can not switch back
+            // to the main view
+            System.out.println("clicked it ");
+            mainActivity.setContentView(R.layout.calendar_view_layout);
         }
     }
 
