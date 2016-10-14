@@ -21,12 +21,17 @@ import java.util.List;
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
 
-
     private List<Task> tasks;
 
     public TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
         tasks = objects;
+    }
+
+    @Override
+    public void add(Task task) {
+        super.add(task);
+        task.save();
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -47,11 +52,13 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             {
 
                 if (isChecked) {
-                    task.setCheck(true);
+                    task.setChecked(true);
+                    task.save();
                     buttonView.setPaintFlags(buttonView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 else {
-                    task.setCheck(false);
+                    task.setChecked(false);
+                    task.save();
                     buttonView.setPaintFlags(buttonView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
 
@@ -66,6 +73,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         {
             public void onClick(View v)
             {
+                tasks.get(position).delete();
                 tasks.remove(position);
                 notifyDataSetChanged();
             }

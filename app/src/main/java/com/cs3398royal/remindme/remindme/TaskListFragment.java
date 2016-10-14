@@ -10,7 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chris on 10/6/2016.
@@ -24,6 +27,7 @@ public class TaskListFragment extends ListFragment {
     Button addButton;
     EditText textBox;
     TaskListAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,6 +43,11 @@ public class TaskListFragment extends ListFragment {
             });
         return taskListView;
         }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,13 +55,11 @@ public class TaskListFragment extends ListFragment {
 
         //Create ArrayList for items to be added to task list
         //String right now, in the future probably Item class
-        ArrayList<Task> taskList = new ArrayList<>();
+        List<Task> taskList;
         //Need to implement our own ArrayAdapter to take Item class and do custom ItemRow
         EditText textBox;
-        //Populate list with something to test
-        taskList.add(new Task("0", "Test Item 1"));
-        taskList.add(new Task("1", "Test Item 2"));
-        taskList.add(new Task("2", "Test Item 3"));
+
+        taskList = SQLite.select().from(Task.class).queryList();
 
         //create array adapter, getActivity returns the current activity
         adapter = new TaskListAdapter(getActivity(), android.R.layout.simple_list_item_1, taskList);
@@ -67,7 +74,7 @@ public class TaskListFragment extends ListFragment {
         String item = textBox.getText().toString();
         //000 is ID placeholder until proper ID generation can be implemented
         if(item.length() != 0) {
-            Task task = new Task("000", item);
+            Task task = new Task(item);
             adapter.add(task);
             textBox.setText("");
         }

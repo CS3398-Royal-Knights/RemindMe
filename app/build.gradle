@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
@@ -20,7 +21,12 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
+
 }
+
+
+
+def dbflow_version = "3.1.1"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -31,4 +37,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 }
