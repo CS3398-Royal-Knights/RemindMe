@@ -57,13 +57,15 @@ public class MainActivity extends AppCompatActivity {
         //Initialize ArrayList of Strings
         navTitles = new ArrayList<>();
         //Set titles for the drawer list
-        navTitles.add("Navigation Item 1");
+        navTitles.add("Calendar View");
         navTitles.add("Navigation Item 2");
         navTitles.add("Navigation Item 3");
+
 
         //Pass titles to the adapter
         drawerRecyclerListAdapter = new NavDrawerRecyclerViewAdapter(navTitles, this);
         mDrawerRecyclerList.setAdapter(drawerRecyclerListAdapter);
+
 
         //Set a layout manager for mDrawerRecyclerList
         mDrawerRecyclerList.setLayoutManager(new LinearLayoutManager(this));
