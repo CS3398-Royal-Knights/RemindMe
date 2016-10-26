@@ -1,34 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!--Drawer Layout can only have two child layouts, one
+    of which is the main content view, and the other is
+    the layout for the navigation drawer. CoordinatorLayout
+    was chosen as the wrapper for our main content because it
+    makes it easier to make screen objects cooperate,
+    giving a cleaner and more polished feel to the app.-->
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <!--Toolbar-->
-    <include
-        android:id="@+id/nav_drawer_toolbar"
-        layout="@layout/nav_drawer_toolbar"
-        ></include>
-    <!--Drawer Layout-->
-    <android.support.v4.widget.DrawerLayout
+    android:layout_height="match_parent">
+
+    <!--This is the main content, CoordinatorLayout makes
+        it easier to coordinate actions between its child
+        Layouts. For example, if you wanted to make the
+        Floating Action Button or Toolbar disappear when
+        the user starts scrolling down the list,
+        CoordinatorView will do that automatically.-->
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/drawer_layout"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--This is the main content-->
+
+    <!--Have to wrap the toolbar in an AppBarLayout for some functionality
+        mostly to fix spacing issues, if we want we can use this to make
+        the toolbar go away when the task list is scrolled, but we have
+        to change the TaskListFragment to using a RecyclerView first-->
+    <android.support.design.widget.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--This includes our nav_drawer_toolbar in the main activity
+            layout-->
+        <include
+            android:id="@+id/nav_drawer_toolbar"
+            layout="@layout/nav_drawer_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
+
+        <!--This is where fragments are loaded into,
+            this layout will not change for the most
+            part, the layout for whatever fragment we
+            want to use is defined in a seperate layout
+            file and inflated into this FrameLayout at
+            runtime-->
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
-        <!-- The navigation drawer -->
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:id="@+id/left_drawer"
-            android:scrollbars="vertical"
-            android:background="#e0e0e0"
-            android:layout_gravity="left"
-            />
-    </android.support.v4.widget.DrawerLayout>
-</LinearLayout>
+
+        <!--Floating Action Button layout-->
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!-- The navigation drawer -->
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/left_drawer"
+        android:background="@android:color/white"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/nav_drawer_menu"
+        />
+</android.support.v4.widget.DrawerLayout>

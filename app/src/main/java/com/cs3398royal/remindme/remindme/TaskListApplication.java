@@ -14,7 +14,9 @@ public class TaskListApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //Initialize DBFlow for Database Management
+        //Initialize DBFlow for Database Management upon creation
+        //of the application. This allows us to use database function
+        //while the views are still being created by the system.
         FlowManager.init(new FlowConfig.Builder(this).build());
     }
 }

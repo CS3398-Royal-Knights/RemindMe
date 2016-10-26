@@ -1,10 +1,13 @@
 package com.cs3398royal.remindme.remindme;
 
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
-    private RecyclerView mDrawerRecyclerList;
-    private RecyclerView.Adapter drawerRecyclerListAdapter;
+    private NavigationView nvDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<String> navTitles;
     /**
@@ -50,23 +53,11 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
         //Initialize views
-        mDrawerRecyclerList = (RecyclerView) findViewById(R.id.left_drawer);
-        mDrawerRecyclerList.addItemDecoration(new SimpleDividerItemDecoration(this, null, false, true));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        //Initialize ArrayList of Strings
-        navTitles = new ArrayList<>();
-        //Set titles for the drawer list
-        navTitles.add("Navigation Item 1");
-        navTitles.add("Navigation Item 2");
-        navTitles.add("Navigation Item 3");
-
-        //Pass titles to the adapter
-        drawerRecyclerListAdapter = new NavDrawerRecyclerViewAdapter(navTitles, this);
-        mDrawerRecyclerList.setAdapter(drawerRecyclerListAdapter);
-
-        //Set a layout manager for mDrawerRecyclerList
-        mDrawerRecyclerList.setLayoutManager(new LinearLayoutManager(this));
+        //Initialize NavigationView and setup click actions to inflate our views
+        nvDrawer = (NavigationView) findViewById(R.id.left_drawer);
+        setupDrawerContent(nvDrawer);
 
         //Set up ActionBarDrawerToggle
         setupDrawerToggle();
@@ -85,10 +76,28 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    //Overrides the built in onOptionsItemSelected method
+    //to open our navigation drawer when the home item
+    //is selected.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //Send configuration changes to drawer toggle so it can update
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     /**
@@ -127,37 +136,69 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int Position, long id) {
-            //TODO: actually do something when a list item is clicked (probably insert different fragment into view)
-        }
+    /**
+     * This method sets up an ItemSelectedListener for our
+     * navigation view that captures the menu item that was
+     * selected and passes it to selectDrawerItem to be
+     * processed.
+     */
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
     }
 
+    /**
+     * In the selectDrawerItem method we will first
+     * determine which list we have selected by getting
+     * its item id with item.getItemId(). This ItemId is
+     * set when populating the menu with our lists, it is the
+     * same as the database key. We will then query the
+     * database for each task associated with this itemId
+     * and load them into a new fragment and inflate it.
+     * There will be a couple of special case menu items that
+     * will have unique Ids out of the range of the database
+     * Ids (menu items like the Add List item and Settings
+     * item), we'll handle these with a switch case.
+     */
+    public void selectDrawerItem(MenuItem item) {
+        //Highlight selected item, we won't do this for add list item
+        item.setChecked(true);
+        //Set the action bar title to item title, again not for add list item
+        setTitle(item.getTitle());
+        //Close the nav drawer
+        mDrawerLayout.closeDrawers();
+    }
+
+    /**
+     * setupToolbar() creates a new toolbar object, and then
+     * sets the action bar for the activity to the new toolbar.
+     * It then sets DisplayShowHomeEnabled to true to show the
+     * hamburger icon.
+     */
     void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.nav_drawer_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * setupDrawerToggle creates a new ActionBarDrawerToggle object
+     * and sets the object as the DrawerLayout's DrawerListener.
+     * This allows the hamburger icon to animate when opening
+     * the drawer.
+     */
     void setupDrawerToggle() {
         //Create a new drawertoggle object
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
-                R.string.drawer_open, R.string.drawer_close) {
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View view) {
-                super.onDrawerOpened(view);
-                invalidateOptionsMenu();
-            }
-        };
+                R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+
     }
 }
 
