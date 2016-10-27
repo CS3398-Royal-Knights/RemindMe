@@ -12,32 +12,8 @@
     <ListView
         android:id="@android:id/list"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_above="@+id/editText">
+        android:layout_width="match_parent">
 
     </ListView>
-
-    <Button
-        android:text="@string/add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:hint="@string/enter_prompt"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-    </EditText>
-
 
 </RelativeLayout>

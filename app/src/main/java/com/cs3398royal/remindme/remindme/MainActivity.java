@@ -4,7 +4,9 @@ package com.cs3398royal.remindme.remindme;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<String> navTitles;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up ActionBarDrawerToggle
         setupDrawerToggle();
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar snackbar = Snackbar.make(v, "You pressed the FAB", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
 
 
         //Load the first task list fragment into the container
