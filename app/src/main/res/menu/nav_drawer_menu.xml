@@ -4,7 +4,8 @@
         time being for testing, they will be replaced
         by the dynamic menu list of TaskLists, and
         the static menu items to add a list and settings-->
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+            android:id="@+id/nav_lists">
         <item
             android:id="@+id/nav_first_fragment"
             android:title="First" />
@@ -15,5 +16,16 @@
             android:id="@+id/nav_third_fragment"
             android:title="Third" />
     </group>
-
+    <group android:id="@+id/nav_footer"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settings_item"
+            android:icon="@drawable/ic_settings_black_24px"
+            android:title="Settings" />
+        <item
+            android:id="@+id/feedback_item"
+            android:icon="@drawable/ic_feedback_black_24px"
+            android:title="Send Feedback"
+            android:checkable="false"/>
+    </group>
 </menu>
