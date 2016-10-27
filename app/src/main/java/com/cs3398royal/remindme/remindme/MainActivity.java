@@ -1,6 +1,7 @@
 package com.cs3398royal.remindme.remindme;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
@@ -60,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar snackbar = Snackbar.make(v, "You pressed the FAB", Snackbar.LENGTH_LONG);
-                snackbar.show();
+                //When clicked, the AddTaskActivity is opened
+                Intent i = new Intent(MainActivity.this, AddTaskActivity.class);
+                startActivity(i);
             }
         });
 
