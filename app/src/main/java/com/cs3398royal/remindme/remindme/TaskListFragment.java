@@ -46,7 +46,23 @@ public class TaskListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Create ArrayList for items to be added to task list
+
+        String data;
+        if (savedInstanceState == null) {
+            Bundle extras = getActivity().getIntent().getExtras();
+            if(extras == null) {
+                data= null;
+            } else {
+                data= extras.getString("taskName");
+            }
+        } else {
+            data= (String) savedInstanceState.getSerializable("taskName");
+        }
+
+
+
+
+            //Create ArrayList for items to be added to task list
         //String right now, in the future probably Item class
         List<Task> taskList;
         //Need to implement our own ArrayAdapter to take Item class and do custom ItemRow
@@ -57,6 +73,11 @@ public class TaskListFragment extends ListFragment {
         //create array adapter, getActivity returns the current activity
         adapter = new TaskListAdapter(getActivity(), android.R.layout.simple_list_item_1, taskList);
         //Have to set list adapter by calling ListFragment.setListAdapter()
+        if(data != null)
+        {
+            Task task = new Task(data);
+            adapter.add(task);
+        }
         super.setListAdapter(adapter);
 
 

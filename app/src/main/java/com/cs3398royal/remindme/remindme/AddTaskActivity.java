@@ -1,6 +1,7 @@
 package com.cs3398royal.remindme.remindme;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -68,12 +69,15 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        EditText text = (EditText) findViewById(R.id.editText);
+        String task = text.getText().toString();
         switch (id) {
             case R.id.action_add:
-                Snackbar.make(layout,
-                        "This will add the task created to the list of tasks", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(AddTaskActivity.this, MainActivity.class);
+                i.putExtra("taskName", task);
+                MainActivity.mainReference.finish();
+                startActivity(i);
+                finish();
                 return true;
         }
         return false;
