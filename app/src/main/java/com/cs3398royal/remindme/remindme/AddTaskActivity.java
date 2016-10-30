@@ -3,8 +3,6 @@ package com.cs3398royal.remindme.remindme;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -13,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,7 +18,6 @@ import java.util.Locale;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    private RelativeLayout layout;
     private EditText dateText;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
@@ -31,7 +27,6 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        layout = (RelativeLayout) findViewById(R.id.content_add_task);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -71,10 +66,13 @@ public class AddTaskActivity extends AppCompatActivity {
         int id = item.getItemId();
         EditText text = (EditText) findViewById(R.id.editText);
         String task = text.getText().toString();
+        if (task.equals(""))
+            return false;
         switch (id) {
             case R.id.action_add:
                 Intent i = new Intent(AddTaskActivity.this, MainActivity.class);
                 i.putExtra("taskName", task);
+                //ends the first main activty only if a new task has been added
                 MainActivity.mainReference.finish();
                 startActivity(i);
                 finish();
