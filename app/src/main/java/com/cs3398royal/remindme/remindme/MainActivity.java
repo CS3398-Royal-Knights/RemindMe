@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        //Add code to load lists from the database, create menu items, and add them to the
+        //navigation menu
     }
 
     /**
@@ -157,6 +159,15 @@ public class MainActivity extends AppCompatActivity {
             item.setChecked(true);
         //Set the action bar title to item title, again not for add list item
         setTitle(item.getTitle());
+
+        //Make the database get the list associated with a menu item
+
+        //Create a new Task List Fragment and load it into the main activity
+        /**TaskListFragment taskList = new TaskListFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.content_frame, taskList);
+        transaction.commit();*/
         //Close the nav drawer
         mDrawerLayout.closeDrawers();
     }
