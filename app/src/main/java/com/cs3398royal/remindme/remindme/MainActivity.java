@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
@@ -36,7 +37,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    DrawerLayout mDrawerLayout;
+    private DrawerLayout mDrawerLayout;
+    private View headerLayout;
     private Toolbar mToolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -70,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize NavigationView and setup click actions to inflate our views
         nvDrawer = (NavigationView) findViewById(R.id.left_drawer);
+        headerLayout = nvDrawer.getHeaderView(0);
         setupDrawerContent(nvDrawer);
+        setHeaderLayoutClickListener(headerLayout);
 
         //Set up ActionBarDrawerToggle
         setupDrawerToggle();
@@ -143,6 +147,29 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        //Add code to load lists from the database, create menu items, and add them to the
+        //navigation menu
+    }
+
+    /**
+     * setHeaderLayoutClickListener finds the nav_drawer_new_list
+     * button that is in the header of the navigation drawer and
+     * creates a click handler that inflates a New List Activity
+     * so the user can add a list.
+     */
+    private void setHeaderLayoutClickListener(View headerLayout) {
+        ImageButton addListButton;
+        addListButton = (ImageButton) headerLayout.findViewById(R.id.nav_drawer_new_list);
+        addListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawers();
+                //TODO: Make this click handler create an intent to a New List Activity
+                Snackbar youDidIt = Snackbar.make(findViewById(R.id.main_content),
+                        "You pressed the Add List Button!", Snackbar.LENGTH_LONG);
+                youDidIt.show();
+            }
+        });
     }
 
     /**
@@ -160,9 +187,19 @@ public class MainActivity extends AppCompatActivity {
      */
     public void selectDrawerItem(MenuItem item) {
         //Highlight selected item, we won't do this for add list item
-        item.setChecked(true);
+        if(item.isCheckable())
+            item.setChecked(true);
         //Set the action bar title to item title, again not for add list item
         setTitle(item.getTitle());
+
+        //Make the database get the list associated with a menu item
+
+        //Create a new Task List Fragment and load it into the main activity
+        /**TaskListFragment taskList = new TaskListFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.content_frame, taskList);
+        transaction.commit();*/
         //Close the nav drawer
         mDrawerLayout.closeDrawers();
     }

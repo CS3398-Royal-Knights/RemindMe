@@ -68,6 +68,7 @@ public class TaskListFragment extends ListFragment {
         //Need to implement our own ArrayAdapter to take Item class and do custom ItemRow
         EditText textBox;
 
+        //This only selects all list tasks in the database
         taskList = SQLite.select().from(Task.class).queryList();
 
         //create array adapter, getActivity returns the current activity
