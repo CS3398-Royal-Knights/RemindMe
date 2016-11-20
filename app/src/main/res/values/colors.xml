@@ -3,4 +3,11 @@
     <color name="colorPrimary">#03A9F4</color>
     <color name="colorPrimaryDark">#039BE5</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="bg_item_normal_state">#fff0f0f0</color>
+    <color name="bg_item_swiping_state">#E0E0E0</color>
+    <color name="bg_item_swiping_active_state">#EEEEEE</color>
+    <color name="bg_swipe_item_left_edit">#fff9930d</color>
+    <color name="bg_swipe_item_left_remove">#f66</color>
+    <color name="bg_swipe_item_right_check">#ff2f8b2a</color>
+    <color name="bg_swipe_item_neutral">@android:color/transparent</color>
 </resources>

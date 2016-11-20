@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+<!--These views are the views that are displayed underneath the task item when swiping-->
+    <FrameLayout
+        android:id="@+id/viewItemChecked"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@drawable/bg_swipe_item_right_check"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/viewEditItem"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/bg_swipe_item_left_edit"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/viewDeleteItem"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/bg_swipe_item_left_remove"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground">
+    </FrameLayout>
+
+    <!--This is the view that displays the name of the list item.-->
+    <FrameLayout
+        android:id="@+id/task_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/task_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left"/>
+    </FrameLayout>
+</FrameLayout>

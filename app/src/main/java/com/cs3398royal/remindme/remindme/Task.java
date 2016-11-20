@@ -22,6 +22,9 @@ public class Task extends BaseModel{
     private boolean isChecked;//set 0 if false, 1 if true
     //private List parentList;
 
+    //Used for determining whether the edit/remove swipe action is pinned to open, no need to add to DB
+    private boolean isPinned;
+
     public long getTaskId(){return taskId;}
 
     public String getTaskName(){return taskName;}
@@ -29,6 +32,10 @@ public class Task extends BaseModel{
     public boolean isChecked() {return isChecked;}
 
     public void setChecked(boolean checkedState){isChecked = checkedState;}
+
+    public boolean isPinned() {return isPinned;}
+
+    public void setPinned(boolean pinnedState) {isPinned = pinnedState;}
 
     public void setTaskName(String taskName){this.taskName = taskName;}
 

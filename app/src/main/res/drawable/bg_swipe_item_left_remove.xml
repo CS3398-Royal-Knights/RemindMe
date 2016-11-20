@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/bg_swipe_item_left_remove"/>
+    </item>
+    <item android:right="16dp"
+        android:drawable="@drawable/ic_clear_black_24dp"
+        android:gravity="right|center_vertical" />
+</layer-list>

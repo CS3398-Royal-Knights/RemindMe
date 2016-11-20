@@ -6,4 +6,6 @@
     <string name="checkbox">Checkbox</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="task_item_removed_text">You removed a task from the list!</string>
+    <string name="snackbar_undo_text">UNDO</string>
 </resources>
