@@ -1,9 +1,13 @@
 package com.cs3398royal.remindme.remindme;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -30,6 +34,7 @@ import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<String> navTitles;
+    private FloatingActionButton fab;
+    public static Activity mainReference;
 
     //Create some tags to make finding our fragments a little easier
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -48,8 +55,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setupToolbar();
+        mainReference = this;
+
+        //recieves data when the add activity task is the most recent activity
+//        String data;
+//        if (savedInstanceState == null) {
+//            Bundle extras = getIntent().getExtras();
+//            if(extras == null) {
+//                data= null;
+//            } else {
+//                data= extras.getString("taskName");
+//            }
+//        } else {
+//            data= (String) savedInstanceState.getSerializable("taskName");
+//        }
+//        System.out.println(data + " Has been entered");
 
         //Initialize views
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -62,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up ActionBarDrawerToggle
         setupDrawerToggle();
+
+        //Set up Floating Action Button
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //When clicked, the AddTaskActivity is opened
+                Intent i = new Intent(MainActivity.this, AddTaskActivity.class);
+                startActivity(i);
+            }
+        });
 
         /**
          * Here is where we initialize the new recycler view. We are going to create two fragments.
@@ -78,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
                 FRAGMENT_TAG_DATA_PROVIDER).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TaskRecyclerViewFragment(),
                 FRAGMENT_TASK_LIST).commit();
+
+
+
         //Load the first task list fragment into the container
         //This will be changed dynamically with the navigation drawer
         //once multiple lists are implemented
