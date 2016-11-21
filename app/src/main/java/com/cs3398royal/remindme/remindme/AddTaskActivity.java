@@ -27,9 +27,12 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        //Set up toolbar for this activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //handles the Calendar pop up when the user presses the Due date box
@@ -53,6 +56,7 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
 
+        //Create a spinner dropdown for displaying lists that a task can be added to
         Spinner spinner = (Spinner)findViewById(R.id.list_dropdown);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.lists_array, android.R.layout.simple_spinner_item);
@@ -80,6 +84,7 @@ public class AddTaskActivity extends AppCompatActivity {
             return false;
         switch (id) {
             case R.id.action_add:
+                Task newTask;
                 Intent i = new Intent(AddTaskActivity.this, MainActivity.class);
                 i.putExtra("taskName", task);
                 //ends the first main activty only if a new task has been added

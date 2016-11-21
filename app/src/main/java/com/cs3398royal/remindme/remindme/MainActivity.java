@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     //Create some tags to make finding our fragments a little easier
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
     private static final String FRAGMENT_TASK_LIST = "task list";
+
+    //Request codes for Intent transactions
+    static final int REQUEST_ADD_TASK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
         if(mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        else
+            return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -149,6 +154,32 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         //Send configuration changes to drawer toggle so it can update
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * Captures a result from an activity that this activity created through
+     * an intent. This function is used to pass information between this activity
+     * and other activities by passing an intent back once the created activity has
+     * finished.
+     * @param requestCode   The request code that this activity sent when creating
+     *                      the other activity.
+     *
+     * @param resultCode    An integer that is the result code that the created activity
+     *                      sends back to this activity upon finishing.
+     *
+     * @param data  An Intent that contains the information being passed back to this
+     *              activity by the created activity upon finishing. This Intent can contain
+     *              extras including strings and possibly a parcelable.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Check to see if the result we get is from the AddTaskActivity
+        if(requestCode == REQUEST_ADD_TASK) {
+            //Check to see if the AddTaskActivity completed successfully
+            if(resultCode == RESULT_OK) {
+                //TODO: pass parcelable to TaskDataProvider to be processed and added to the correct list
+            }
+        }
     }
 
     /**
@@ -174,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Do something when an Item in the task list has its options
      * menu pinned to the open state.
+     *
      * @param pos The position in the list of the item with its menu pinned open
      */
     public void onItemPinned(int pos) {
@@ -183,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Do something when a particular task in the list of tasks is clicked.
-     * @param pos
+     * @param pos   An int that is the position of the item in the RecyclerView
      */
     public void onItemClicked(int pos) {
         //Currently does nothing. If we decide to do something when a task in the list
@@ -196,7 +228,8 @@ public class MainActivity extends AppCompatActivity {
      * This function will create a fragment or an activity that allows the user to edit the details
      * of the task that is at the position position. It will then update the task at the position
      * in the data provider, and notify the recycler view that the task has changed
-     * @param position
+     *
+     * @param position  An int that is the position of the item in the RecyclerView list.
      */
     public void onItemViewEditOptionClicked(int position) {
         //TODO: create an edit task fragment/activity for editing the details of a task
@@ -245,8 +278,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    @Override//@NonNull means the MenuItem object passed to this function can't be null
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         selectDrawerItem(menuItem);
                         return true;
                     }
@@ -288,6 +321,12 @@ public class MainActivity extends AppCompatActivity {
      * will have unique Ids out of the range of the database
      * Ids (menu items like the Add List item and Settings
      * item), we'll handle these with a switch case.
+     *
+     * @param item A MenuItem object that is the Item that was selected
+     *             in the NavigationView Menu. This Item will have a title,
+     *             item id, and possibly a SubMenu that the MenuItem is associated
+     *             with. We can check if the MenuItem is part of a SubMenu by invoking
+     *             hasSubMenu() on the item.
      */
     public void selectDrawerItem(MenuItem item) {
         //Highlight selected item, we won't do this for add list item
@@ -317,7 +356,9 @@ public class MainActivity extends AppCompatActivity {
     void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.nav_drawer_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //If the action bar exists, we set it to show the home button on the toolbar
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     /**
