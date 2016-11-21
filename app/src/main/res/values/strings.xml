@@ -6,6 +6,12 @@
     <string name="checkbox">Checkbox</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="title_activity_add_task">AddTaskActivity</string>
+    <string name="enter_task_name">Enter Task Name</string>
+    <string name="enter_due_date">Enter Due Date</string>
+    <string name="add_details">Add a some more details about your task</string>
+    <string name="add_description">Description</string>
+    <string name="add_to_a_list">Add to a list</string>
     <string name="task_item_removed_text">You removed a task from the list!</string>
     <string name="snackbar_undo_text">UNDO</string>
 </resources>

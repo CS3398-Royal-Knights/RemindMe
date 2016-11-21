@@ -48,6 +48,12 @@ public class TaskDataProvider {
             else {
                 insertedPosition = mData.size();
             }
+            //If the task was removed with its options menu pinned open,
+            //we want to unpin it so it doesn't come back with its options menu
+            //open
+            if(mLastRemovedTask.isPinned()) {
+                mLastRemovedTask.setPinned(false);
+            }
             mData.add(insertedPosition, mLastRemovedTask);
 
             mLastRemovedTask.save();
