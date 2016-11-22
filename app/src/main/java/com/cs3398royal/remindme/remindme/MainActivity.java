@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onItemRemoved(int pos) {
         Snackbar snackbar = Snackbar.make(
-                findViewById(R.id.content_frame),
+                findViewById(R.id.main_content),
                 R.string.task_item_removed_text,
                 Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.snackbar_undo_text, new View.OnClickListener() {
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             dueDateStr = "Task has no due date.";
         }
         Snackbar snackbar = Snackbar.make(
-                findViewById(R.id.content_frame),
+                findViewById(R.id.main_content),
                 dueDateStr,
                 Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         //for a task.
         String editPressed = "You pressed edit for item " + getDataProvider().getItem(position).getTaskName();
         Snackbar snackbar = Snackbar.make(
-                findViewById(R.id.content_frame),
+                findViewById(R.id.main_content),
                 editPressed,
                 Snackbar.LENGTH_LONG);
         snackbar.show();

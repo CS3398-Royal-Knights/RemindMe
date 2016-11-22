@@ -82,6 +82,16 @@ public class TaskDataProvider {
         mLastRemovedPosition = -1;
     }
 
+    public void moveToEnd(int pos) {
+        final Task item = mData.remove(pos);
+        mData.add(getCount() - 1, item);
+    }
+
+    public void moveToTop(int pos) {
+        final Task item = mData.remove(pos);
+        mData.add(0, item);
+    }
+
     public void swapTask(int from, int to) {
         if(from == to) {
             return;

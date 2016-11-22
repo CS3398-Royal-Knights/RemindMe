@@ -342,8 +342,6 @@ public class TaskRecyclerAdapter
             super.onPerformAction();
             //Change the checked state on the item and save the state to the database
             mAdapter.mProvider.transitionCheckedState(mPos);
-            //Notify the adapter that the item's state has changed so it can redraw the
-            //item with a line through the text if the item is checked off
             mAdapter.notifyItemChanged(mPos);
         }
         @Override

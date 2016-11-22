@@ -42,7 +42,8 @@
             android:id="@+id/nav_drawer_toolbar"
             layout="@layout/nav_drawer_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"/>
     </android.support.design.widget.AppBarLayout>
 
         <!--This is where fragments are loaded into,
@@ -51,12 +52,13 @@
             want to use is defined in a seperate layout
             file and inflated into this FrameLayout at
             runtime-->
-        <FrameLayout
+        <android.support.v4.widget.NestedScrollView
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize">
-        </FrameLayout>
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior" >
+
+        </android.support.v4.widget.NestedScrollView>
 
         <!--Floating Action Button layout-->
 
