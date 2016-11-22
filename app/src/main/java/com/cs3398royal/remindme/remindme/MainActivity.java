@@ -3,9 +3,11 @@ package com.cs3398royal.remindme.remindme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.graphics.Color;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +36,11 @@ import android.widget.ListView;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import org.parceler.Parcels;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<String> navTitles;
     private FloatingActionButton fab;
-    public static Activity mainReference;
 
     //Create some tags to make finding our fragments a little easier
     private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupToolbar();
-        mainReference = this;
 
         //recieves data when the add activity task is the most recent activity
 //        String data;
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //When clicked, the AddTaskActivity is opened
                 Intent i = new Intent(MainActivity.this, AddTaskActivity.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_ADD_TASK);
             }
         });
 
@@ -177,7 +181,14 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == REQUEST_ADD_TASK) {
             //Check to see if the AddTaskActivity completed successfully
             if(resultCode == RESULT_OK) {
-                //TODO: pass parcelable to TaskDataProvider to be processed and added to the correct list
+                int newIndex;
+                newIndex = getDataProvider().addTask((Task) Parcels.unwrap(data.getParcelableExtra("taskObject")));
+                //If the index that the Task was added to is a valid index we
+                // tell the RecyclerView that the data set was updated.
+                if(newIndex >= 0) {
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TASK_LIST);
+                    ((TaskRecyclerViewFragment) fragment).notifyItemInserted(newIndex);
+                }
             }
         }
     }
@@ -222,6 +233,18 @@ public class MainActivity extends AppCompatActivity {
         //is clicked, the code for it goes here.
         //Some things we could do are maybe expand the item to show the "details" for the
         //item??
+        Date taskDueDate = getDataProvider().getItem(pos).getDueDate();
+        String dueDateStr;
+        if(taskDueDate != null) {
+            dueDateStr = "Task is due: " + DateFormat.getDateInstance().format(taskDueDate);
+        } else {
+            dueDateStr = "Task has no due date.";
+        }
+        Snackbar snackbar = Snackbar.make(
+                findViewById(R.id.content_frame),
+                dueDateStr,
+                Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     /**
@@ -284,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        navigationView.setItemIconTintList(null);
         //Add code to load lists from the database, create menu items, and add them to the
         //navigation menu
     }

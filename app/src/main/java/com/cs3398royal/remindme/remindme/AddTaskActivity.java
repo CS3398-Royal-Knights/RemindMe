@@ -3,6 +3,7 @@ package com.cs3398royal.remindme.remindme;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -14,6 +15,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.parceler.Parcels;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -23,6 +26,9 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText dateText;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
+    private Calendar mDueDate;
+    private long mListId;
+    private String mDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +48,9 @@ public class AddTaskActivity extends AppCompatActivity {
         dateFormatter = new SimpleDateFormat("E, MMM dd, yyyy", Locale.US);
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                dateText.setText(dateFormatter.format(newDate.getTime()));
+                mDueDate = Calendar.getInstance();
+                mDueDate.set(year, monthOfYear, dayOfMonth);
+                dateText.setText(dateFormatter.format(mDueDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -80,21 +86,52 @@ public class AddTaskActivity extends AppCompatActivity {
         int id = item.getItemId();
         EditText text = (EditText) findViewById(R.id.editText);
         String task = text.getText().toString();
-        if (task.equals(""))
+        if (task.trim().length() == 0)
             return false;
         switch (id) {
             case R.id.action_add:
-                Task newTask;
-                Intent i = new Intent(AddTaskActivity.this, MainActivity.class);
-                i.putExtra("taskName", task);
-                //ends the first main activty only if a new task has been added
-                MainActivity.mainReference.finish();
-                startActivity(i);
+                Task newTask = createTaskFromInputFields(task.trim());
+                Intent i = new Intent();
+
+                //Wrap the new task in a Parcel and put it as Extra.
+                i.putExtra("taskObject", Parcels.wrap(newTask));
+                //Done wrapping, can now set the result and send new
+                //task to the list
+                setResult(RESULT_OK, i);
                 finish();
                 return true;
         }
         return false;
     }
 
-
+    /**
+     * Takes the name of the task to be created, and returns a Task
+     * with class fields that correspond to the values of the user
+     * input fields in the activity
+     *
+     * @param taskName  The name of the task to be created. This value
+     *                  must not be null.
+     *
+     * @return  A Task object with fields that correspond to the user
+     *          input.
+     */
+    Task createTaskFromInputFields(@NonNull String taskName) {
+        Task tempTask = new Task(taskName);
+        EditText descBox = (EditText) findViewById(R.id.editText4);
+        mDescription = descBox.getText().toString();
+        //TODO: Check input fields and add other values to task to complete implementation
+            //Due Date - DONE
+            //Description - DONE
+            //List
+            //Others as needed
+        if(mDueDate != null) {
+            tempTask.setDueDate(mDueDate.getTime());
+        } else {
+            tempTask.setDueDate(null);
+        }
+        if(mDescription.trim().length() > 0) {
+            tempTask.setDescription(mDescription.trim());
+        }
+        return tempTask;
+    }
 }

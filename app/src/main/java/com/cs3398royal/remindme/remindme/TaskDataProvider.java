@@ -1,5 +1,7 @@
 package com.cs3398royal.remindme.remindme;
 
+import android.os.Parcel;
+
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.Collections;
@@ -13,6 +15,7 @@ import java.util.List;
 public class TaskDataProvider {
     private List<Task> mData;
     private Task mLastRemovedTask;
+    //private TaskList mCurrLoadedList;
     private int mLastRemovedPosition;
 
     public TaskDataProvider() {
@@ -115,9 +118,34 @@ public class TaskDataProvider {
         }
     }
 
+
+    /**
+     * Adds a task to the list that the task is associated with and saves
+     * it to the database. If the list that the task is associated with is the
+     * currently loaded list, the task is added to the mData list, if not it is
+     * simply saved to the database.
+     * @param task  The Task object to be added. This Task object must have a non-null
+     *              TaskList field.
+     * @return  Returns the index of the newly added task. Returns -1 if the task was added
+     *          to a different list than the current list.
+     */
+    public int addTask(Task task) {
+        //TODO: check list associated with task to see if it's the current list & add if it is, else save to DB only
+                //(save to DB will automatically save the item properly, and it will be loaded
+                //next time the list is loaded)
+
+        //By default we'll add the task to the top of the list
+        Task newTask = task;
+        int insertedPos = 0;
+        mData.add(insertedPos, newTask);
+        task.save();
+        return insertedPos;
+    }
+
 /*    public void loadListFromDB(TaskList list) {
         //Remove all tasks from the data provider list
         //Load all tasks from the database that are associated with the input list
+        //Set mCurrLoadedList to input param
     }*/
 
 }
