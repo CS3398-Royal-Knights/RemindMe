@@ -120,15 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 FRAGMENT_TASK_LIST).commit();
 
 
-
-        //Load the first task list fragment into the container
-        //This will be changed dynamically with the navigation drawer
-        //once multiple lists are implemented
-        /*TaskListFragment taskList = new TaskListFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content_frame, taskList);
-        transaction.commit();*/
     }
 
     /**
@@ -359,14 +350,11 @@ public class MainActivity extends AppCompatActivity {
         //Set the action bar title to item title, again not for add list item
         setTitle(item.getTitle());
 
-        //Make the database get the list associated with a menu item
+        //Pass the list ID (MenuItem.getId()) to the DataProvider to load all tasks associated
+            //with that list
+        //Create a new TaskRecyclerViewFragment, passing getDataProvider() to the consturctor
+        //Replace the current Fragment with new Recycler Fragment
 
-        //Create a new Task List Fragment and load it into the main activity
-        /**TaskListFragment taskList = new TaskListFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content_frame, taskList);
-        transaction.commit();*/
         //Close the nav drawer
         mDrawerLayout.closeDrawers();
     }
