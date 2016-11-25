@@ -42,6 +42,8 @@ public class TaskRecyclerAdapter
     public interface EventListener {
         void onItemRemoved(int position);
 
+        void onItemCheckedStateChanged(int position, boolean checkedState);
+
         void onItemPinned(int position);
 
         void onItemViewClicked(View v, boolean pinned);
@@ -332,6 +334,7 @@ public class TaskRecyclerAdapter
     private static class SwipeRightCheckAction extends SwipeResultActionMoveToSwipedDirection {
         private TaskRecyclerAdapter mAdapter;
         private final int mPos;
+        private boolean mCheckedState;
 
         SwipeRightCheckAction(TaskRecyclerAdapter adapter, int pos) {
             mAdapter = adapter;
@@ -342,7 +345,16 @@ public class TaskRecyclerAdapter
             super.onPerformAction();
             //Change the checked state on the item and save the state to the database
             mAdapter.mProvider.transitionCheckedState(mPos);
+            mCheckedState = mAdapter.mProvider.getItem(mPos).isChecked();
             mAdapter.notifyItemChanged(mPos);
+        }
+        @Override
+        protected void onSlideAnimationEnd() {
+            super.onSlideAnimationEnd();
+
+            if(mAdapter.mEventListener != null) {
+                mAdapter.mEventListener.onItemCheckedStateChanged(mPos, mCheckedState);
+            }
         }
         @Override
         protected void onCleanUp() {

@@ -85,6 +85,11 @@ public class TaskRecyclerViewFragment extends Fragment {
                 //Handle the event, this makes our code more reuseable and easier to maintain
                 ((MainActivity) getActivity()).onItemViewEditOptionClicked(position);
             }
+            @Override
+            public void onItemCheckedStateChanged(int position, boolean checkedState) {
+                //Allow the MainActivity to handle this event
+                ((MainActivity) getActivity()).onItemCheckedStateChanged(position, checkedState);
+            }
         });
 
         mAdapter = mTaskAdapter;

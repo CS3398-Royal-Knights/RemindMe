@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity {
      * @param pos   An int that is the position of the item in the RecyclerView
      */
     public void onItemClicked(int pos) {
-        //Currently does nothing. If we decide to do something when a task in the list
-        //is clicked, the code for it goes here.
+        //Currently only creates a Snackbar with the Due Date for testing purposes.
+        // If we decide to do something when a task is clicked, the code for it goes here.
         //Some things we could do are maybe expand the item to show the "details" for the
         //item??
         Date taskDueDate = getDataProvider().getItem(pos).getDueDate();
@@ -255,6 +255,34 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.main_content),
                 editPressed,
                 Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    /**
+     * Do something when a task that is currently loaded has its checked state changed.
+     * @param position  The position of the task in the list
+     * @param checkedState  The new checked state for the task that was changed.
+     *                      Set to true if the task is "completed" and false otherwise.
+     */
+    public void onItemCheckedStateChanged(int position, boolean checkedState) {
+        //For testing purposes we will create a snackbar that just tells us we (un)checked the task.
+        Snackbar snackbar;
+        String taskCompleted = "You set the task \"" + getDataProvider().getItem(position).getTaskName()
+                + "\" as completed!";
+        String taskIncomplete = "You set the task \"" + getDataProvider().getItem(position).getTaskName()
+                + "\" as not completed!";
+        if(checkedState) {
+            snackbar = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    taskCompleted,
+                    Snackbar.LENGTH_LONG);
+        }
+        else {
+            snackbar = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    taskIncomplete,
+                    Snackbar.LENGTH_LONG);
+        }
         snackbar.show();
     }
 
