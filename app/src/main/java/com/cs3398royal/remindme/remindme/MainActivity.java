@@ -231,6 +231,15 @@ public class MainActivity extends AppCompatActivity {
         } else {
             dueDateStr = "Task has no due date.";
         }
+        int priority = getDataProvider().getItem(pos).getTaskPriority();
+        String priorityStr="";
+        if(priority == 1)
+            priorityStr = "; Task is low priority";
+        if(priority == 2)
+            priorityStr = "; Task is medium priority";
+        if(priority == 3)
+            priorityStr = "; Task is high priority";
+        dueDateStr += priorityStr;
         Snackbar snackbar = Snackbar.make(
                 findViewById(R.id.main_content),
                 dueDateStr,
