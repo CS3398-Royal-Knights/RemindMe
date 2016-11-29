@@ -33,7 +33,7 @@ public class Task extends BaseModel{
     //Also represent the Due Date in time-since-epoch format so it can be sent in a Parcel from AddTaskActivity
     private long dueDateMs;
 
-
+    @Column
     private int taskPriority;
 
     @Column
