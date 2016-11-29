@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -53,7 +54,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 dateText.setText(dateFormatter.format(mDueDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        //
+
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +64,24 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
         //Create a spinner dropdown for displaying lists that a task can be added to
-        Spinner spinner = (Spinner)findViewById(R.id.list_dropdown);
+        Spinner listSpinner = (Spinner)findViewById(R.id.list_dropdown);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.lists_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        listSpinner.setAdapter(adapter);
+
+        //Create a spinner for giving the task a priority
+        Spinner prioritySpinner = (Spinner)findViewById(R.id.priority_spinner);
+        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.priorities_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        prioritySpinner.setAdapter(priorityAdapter);
+
+
     }
 
 
@@ -119,6 +131,20 @@ public class AddTaskActivity extends AppCompatActivity {
         Task tempTask = new Task(taskName);
         EditText descBox = (EditText) findViewById(R.id.editText4);
         mDescription = descBox.getText().toString();
+        Spinner priority = (Spinner)findViewById(R.id.priority_spinner);
+        String priorityLevel = priority.getSelectedItem().toString();
+        if(priorityLevel.equals("!"))
+        {
+            tempTask.setTaskPriority(1);
+        }
+        else if (priorityLevel.equals("!!"))
+        {
+            tempTask.setTaskPriority(2);
+        }
+        else if (priorityLevel.equals("!!!"))
+        {
+            tempTask.setTaskPriority(3);
+        }
         //TODO: Check input fields and add other values to task to complete implementation
             //Due Date - DONE
             //Description - DONE
