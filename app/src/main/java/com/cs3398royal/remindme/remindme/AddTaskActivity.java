@@ -53,7 +53,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 dateText.setText(dateFormatter.format(mDueDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        //
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
