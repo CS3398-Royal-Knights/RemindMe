@@ -33,6 +33,9 @@ public class Task extends BaseModel{
     //Also represent the Due Date in time-since-epoch format so it can be sent in a Parcel from AddTaskActivity
     private long dueDateMs;
 
+
+    private int taskPriority;
+
     @Column
     private String description;
     //private TaskList parentList;
@@ -46,6 +49,10 @@ public class Task extends BaseModel{
     public long getTaskId(){return taskId;}
 
     public String getTaskName(){return taskName;}
+
+    public int getTaskPriority(){return taskPriority;}
+
+    public void setTaskPriority(int priority){taskPriority = priority;}
 
     public boolean isChecked() {return isChecked;}
 
