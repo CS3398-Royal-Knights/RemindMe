@@ -73,6 +73,19 @@
             app:layout_anchorGravity="bottom|right|end"
             app:elevation="7dp" />
 
+
+        <!--Floating Action Button layout for Calendar-->
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_menu_month_24dp"
+            android:id="@+id/cfab"
+            app:layout_anchor="@+id/content_frame"
+            app:layout_anchorGravity="top|right|end"
+            app:elevation="7dp" />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- The navigation drawer -->
