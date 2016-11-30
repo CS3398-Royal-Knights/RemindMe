@@ -17,12 +17,17 @@ public class TaskDataProvider {
     private Task mLastRemovedTask;
     //private TaskList mCurrLoadedList;
     private int mLastRemovedPosition;
+    /* added by Taurino Tostado 11.29.16*/
+    private List<TaskList> mLists;
+
 
     public TaskDataProvider() {
         mData = new LinkedList<>();
         //Initialize list to all tasks in database, this is like
         //displaying "all lists"
         mData = SQLite.select().from(Task.class).queryList();
+        /*Added by Taurino Tostado 11.29.16*/
+       mLists = SQLite.select().from(TaskList.class).queryList();
     }
 
     public int getCount() {
@@ -152,10 +157,23 @@ public class TaskDataProvider {
         return insertedPos;
     }
 
-/*    public void loadListFromDB(TaskList list) {
+   public void loadListWithID(long listId) {
         //Remove all tasks from the data provider list
         //Load all tasks from the database that are associated with the input list
         //Set mCurrLoadedList to input param
-    }*/
+        TaskList tempList = null;
+        for(int i = 0; i < mLists.size(); i++)
+        {
+           if(mLists.get(i).getListId() == listId)
+           {
+               tempList = mLists.get(i);
+           }
+        }
+       if(tempList != null)
+       {
+           mData.clear();
+           mData = tempList.getChildTasks();
+       }
+    }
 
 }
