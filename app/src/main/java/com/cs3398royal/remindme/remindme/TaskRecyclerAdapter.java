@@ -177,11 +177,11 @@ public class TaskRecyclerAdapter
         //Set priority text
         switch(task.getTaskPriority()) {
             case 1:
-                holder.mPriority.setBackgroundColor(Color.parseColor("#f1c40f"));
+                holder.mPriority.setBackgroundColor(Color.parseColor("#43A047"));
                 break;
             case 2:
 
-                holder.mPriority.setBackgroundColor(Color.parseColor("#FF6F00"));
+                holder.mPriority.setBackgroundColor(Color.parseColor("#f1c40f"));
                 break;
             case 3:
                 holder.mPriority.setBackgroundColor(Color.parseColor("#b71c1c"));
