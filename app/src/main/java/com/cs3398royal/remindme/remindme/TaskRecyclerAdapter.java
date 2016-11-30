@@ -1,6 +1,7 @@
 package com.cs3398royal.remindme.remindme;
 
 import android.app.usage.UsageEvents;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.EventListener;
 
 /**
@@ -154,6 +157,36 @@ public class TaskRecyclerAdapter
 
         //set task text
         holder.mTextView.setText(task.getTaskName());
+        //Set the text for the date, only show year if it's not due this year
+        if(task.getDueDate() != null) {
+            String dueDate;
+            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+            Calendar dueDateCalendar = Calendar.getInstance();
+            Calendar now = Calendar.getInstance();
+            dueDateCalendar.setTime(task.getDueDate());
+            int year = dueDateCalendar.get(Calendar.YEAR);
+            if(year != now.get(Calendar.YEAR)) {
+                formatter.applyLocalizedPattern("MMM dd, YYYY");
+            }
+            else {
+                formatter.applyLocalizedPattern("MMM dd");
+            }
+            dueDate = formatter.format(dueDateCalendar.getTime());
+            holder.mDateText.setText(dueDate);
+        }
+        //Set priority text
+        switch(task.getTaskPriority()) {
+            case 1:
+                holder.mPriority.setBackgroundColor(Color.parseColor("#43A047"));
+                break;
+            case 2:
+
+                holder.mPriority.setBackgroundColor(Color.parseColor("#f1c40f"));
+                break;
+            case 3:
+                holder.mPriority.setBackgroundColor(Color.parseColor("#b71c1c"));
+                break;
+        }
 
         //If the task is checked as completed, set the text to strikethrough
         if(task.isChecked()) {

@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Request codes for Intent transactions
     static final int REQUEST_ADD_TASK = 1;
+    static final int REQUEST_EDIT_TASK = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
