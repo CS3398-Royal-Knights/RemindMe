@@ -135,8 +135,15 @@ public class MainActivity extends AppCompatActivity {
         if(mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        else
-            return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.calendarView:
+                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 
     @Override
