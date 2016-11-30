@@ -1,9 +1,12 @@
 package com.cs3398royal.remindme.remindme;
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
@@ -17,7 +20,7 @@ import java.util.Date;
 
 @Table(database = TaskListDatabase.class)
 @Parcel(value = Parcel.Serialization.BEAN, analyze = {Task.class})
-public class Task extends BaseModel{
+public class  Task extends BaseModel{
     @Column
     @PrimaryKey (autoincrement = true)
     private long taskId;
@@ -38,7 +41,10 @@ public class Task extends BaseModel{
 
     @Column
     private String description;
-    //private TaskList parentList;
+
+    @Column
+    long parentListId;
+
 
     //Used for determining whether the edit/remove swipe action is pinned to open, no need to add to DB
     //or serialize when creating Parcel with Parceler
@@ -57,6 +63,10 @@ public class Task extends BaseModel{
     public boolean isChecked() {return isChecked;}
 
     public void setChecked(boolean checkedState){isChecked = checkedState;}
+
+    public void setParentListId(long parentId) {parentListId = parentId;}
+
+    public long getParentListId() {return parentListId;}
 
     @Transient
     public void setDueDate(Date dueDate) {

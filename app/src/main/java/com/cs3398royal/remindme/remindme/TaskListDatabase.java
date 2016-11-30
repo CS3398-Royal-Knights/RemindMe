@@ -19,9 +19,9 @@ import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 @Database(name = TaskListDatabase.DATABASE_NAME, version = TaskListDatabase.DATABASE_VERSION)
 public class TaskListDatabase {
     public static final String DATABASE_NAME = "TaskListDatabase";
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 16;
 
-    @Migration(version = 15, database = TaskListDatabase.class)
+    @Migration(version = 16, database = TaskListDatabase.class)
     public static class MigrateVersion2 extends BaseMigration {
         @Override
         public void migrate(DatabaseWrapper database) {
