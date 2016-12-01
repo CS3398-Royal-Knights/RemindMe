@@ -19,15 +19,24 @@ import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 @Database(name = TaskListDatabase.DATABASE_NAME, version = TaskListDatabase.DATABASE_VERSION)
 public class TaskListDatabase {
     public static final String DATABASE_NAME = "TaskListDatabase";
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 17;
 
-    @Migration(version = 15, database = TaskListDatabase.class)
+    @Migration(version = 17, database = TaskListDatabase.class)
     public static class MigrateVersion2 extends BaseMigration {
         @Override
         public void migrate(DatabaseWrapper database) {
-            ModelAdapter myAdapter = FlowManager.getModelAdapter(Task.class);
-            database.execSQL("DROP TABLE IF EXISTS " + myAdapter.getTableName());
-            database.execSQL(myAdapter.getCreationQuery());
+            //Get the model adapters for the Task and TaskList tables
+            ModelAdapter taskModelAdapter = FlowManager.getModelAdapter(Task.class);
+            ModelAdapter taskListModelAdapter = FlowManager.getModelAdapter(TaskList.class);
+
+            //Drop the Task and TaskList tables if they exist
+            database.execSQL("DROP TABLE IF EXISTS " + taskModelAdapter.getTableName());
+            database.execSQL("DROP TABLE IF EXISTS " + taskListModelAdapter.getTableName());
+
+            //Recreate the tables to rebuild database
+            database.execSQL(taskListModelAdapter.getCreationQuery());
+            database.execSQL(taskModelAdapter.getCreationQuery());
+
         }
     }
 }

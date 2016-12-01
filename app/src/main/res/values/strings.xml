@@ -17,4 +17,5 @@
     <string name='Calendar'>Calandar</string>
     <string name='Week'>Week</string>
     <string name="title_activity_calendar">Calandar</string>
+    <string name="sort">Sort</string>
 </resources>

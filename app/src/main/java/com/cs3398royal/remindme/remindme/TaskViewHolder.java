@@ -19,6 +19,8 @@ public class TaskViewHolder extends AbstractDraggableSwipeableItemViewHolder {
     public View mSwipeOptionEdit;
     public View mSwipeOptionRemove;
     public TextView mTextView;
+    public TextView mDateText;
+    public View mPriority;
     float lastSwipeAmount;
 
     public TaskViewHolder(View v) {
@@ -28,6 +30,8 @@ public class TaskViewHolder extends AbstractDraggableSwipeableItemViewHolder {
         mSwipeOptionEdit = v.findViewById(R.id.viewEditItem);
         mSwipeOptionRemove = v.findViewById(R.id.viewDeleteItem);
         mTextView = (TextView) v.findViewById(R.id.task_text);
+        mDateText = (TextView) v.findViewById(R.id.date_text);
+        mPriority = v.findViewById(R.id.task_priority);
     }
     @Override
     public View getSwipeableContainerView() {

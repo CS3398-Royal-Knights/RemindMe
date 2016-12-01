@@ -21,10 +21,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Request codes for Intent transactions
     static final int REQUEST_ADD_TASK = 1;
+    static final int REQUEST_EDIT_TASK = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +150,40 @@ public class MainActivity extends AppCompatActivity {
                 //task to the list
                 startActivity(i);
                 break;
+            case R.id.action_sort:
+                //sort the tasks
+                //MenuItem menuBtn = (MenuItem)findViewById(R.id.action_sort);
+                View menuItemView = findViewById(R.id.action_sort);
+                PopupMenu popup = new PopupMenu(MainActivity.this, menuItemView);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.show();
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id){
+                            case R.id.priority:
+                                getDataProvider().sortTasksByPriority();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.alpha:
+                                getDataProvider().sortTasksByAlpha();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.date:
+                                getDataProvider().sortTasksByDate();
+                                updateRecyclerViewList();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+
+
+                //getDataProvider().sortTasksByPriority();
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -198,9 +236,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sort_task_menu, menu);
         getMenuInflater().inflate(R.menu.calendar_view, menu);
 
         return true;
@@ -340,6 +381,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Notifies the Recycler View that the list has changed in some way, and it should
+     * re-draw the list
+     */
+    private void updateRecyclerViewList() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TASK_LIST);
+        ((TaskRecyclerViewFragment) fragment).notifyDataSetChanged();
+    }
+
+    /**
      * This method sets up an ItemSelectedListener for our
      * navigation view that captures the menu item that was
      * selected and passes it to selectDrawerItem to be
@@ -357,9 +407,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        navigationView.setItemIconTintList(null);
         //Add code to load lists from the database, create menu items, and add them to the
         //navigation menu
+
     }
 
     /**
