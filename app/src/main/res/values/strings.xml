@@ -14,8 +14,9 @@
     <string name="add_to_a_list">Add to a list</string>
     <string name="task_item_removed_text">You removed a task from the list!</string>
     <string name="snackbar_undo_text">UNDO</string>
-    <string name='Calendar'>Calandar</string>
+    <string name='Calendar'>Calendar</string>
     <string name='Week'>Week</string>
-    <string name="title_activity_calendar">Calandar</string>
+    <string name="title_activity_calendar">Calendar</string>
+    <string name="title_activity_week">Week</string>
     <string name="sort">Sort</string>
 </resources>
