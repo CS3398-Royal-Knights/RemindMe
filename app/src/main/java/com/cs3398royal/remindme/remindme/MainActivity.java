@@ -352,7 +352,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        navigationView.setItemIconTintList(null);
         //Add code to load lists from the database, create menu items, and add them to the
         //navigation menu
 
