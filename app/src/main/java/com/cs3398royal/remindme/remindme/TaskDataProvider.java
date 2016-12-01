@@ -4,9 +4,11 @@ import android.os.Parcel;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Chris on 11/7/2016.
@@ -26,7 +28,7 @@ public class TaskDataProvider {
         mData = new LinkedList<>();
         //Initialize list to all tasks in database, this is like
         //displaying "all lists"
-        
+
         /*Added by Taurino Tostado 11.29.16*/
         mLists = SQLite.select().from(TaskList.class).queryList();
         //Load all tasks list by default
@@ -172,7 +174,10 @@ public class TaskDataProvider {
         return -1;
     }
 
-    public void loadTasksFromListWithId(long listId) {
+    public void loadListWithID(long listId) {
+        //Remove all tasks from the data provider list
+        //Load all tasks from the database that are associated with the input list
+        //Set mCurrLoadedList to input param
         TaskList tempList = null;
         for (int i = 0; i < mLists.size(); i++) {
             if (mLists.get(i).getListId() == listId) {
@@ -231,5 +236,73 @@ public class TaskDataProvider {
     public void loadUncategorizedTasks() {
         mData = SQLite.select().from(Task.class).where(Task_Table.parentListId.eq(-2)).queryList();
         mCurrLoadedList = new TaskList("Uncategorized", -2);
+    }
+
+    public void sortTasksByPriority(){
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 1 )
+            {
+                moveToTop(i);
+            }
+        }
+
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 2 )
+            {
+                moveToTop(i);
+            }
+        }
+
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 3 )
+            {
+                moveToTop(i);
+            }
+        }
+
+    }
+
+    public void sortTasksByAlpha(){
+        ArrayList<String> names = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++)
+        {
+            names.add(mData.get(i).getTaskName());
+        }
+        Collections.sort(names);
+        Collections.reverse(names);
+        for (int i = 0; i < names.size(); i++)
+        {
+            for (int j = 0; j < mData.size(); j++)
+            {
+                if(names.get(i).equals( mData.get(j).getTaskName()))
+                {
+                    moveToTop(j);
+                }
+            }
+        }
+    }
+
+    public void sortTasksByDate(){
+        ArrayList<Date> dates = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++)
+        {
+            dates.add(mData.get(i).getDueDate());
+        }
+        Collections.sort(dates);
+        Collections.reverse(dates);
+        for (int i = 0; i < dates.size(); i++)
+        {
+            for (int j = 0; j < mData.size(); j++)
+            {
+                if(dates.get(i).equals( mData.get(j).getDueDate()))
+                {
+                    moveToTop(j);
+                }
+            }
+        }
+
     }
 }

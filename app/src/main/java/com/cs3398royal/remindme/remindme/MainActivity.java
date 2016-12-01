@@ -1,30 +1,53 @@
 package com.cs3398royal.remindme.remindme;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.graphics.Color;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.parceler.Parcels;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -113,6 +136,40 @@ public class MainActivity extends AppCompatActivity {
             case R.id.calendarView:
                 startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                 break;
+            case R.id.action_sort:
+                //sort the tasks
+                //MenuItem menuBtn = (MenuItem)findViewById(R.id.action_sort);
+                View menuItemView = findViewById(R.id.action_sort);
+                PopupMenu popup = new PopupMenu(MainActivity.this, menuItemView);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.show();
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id){
+                            case R.id.priority:
+                                getDataProvider().sortTasksByPriority();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.alpha:
+                                getDataProvider().sortTasksByAlpha();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.date:
+                                getDataProvider().sortTasksByDate();
+                                updateRecyclerViewList();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+
+
+                //getDataProvider().sortTasksByPriority();
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -170,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sort_task_menu, menu);
         getMenuInflater().inflate(R.menu.calendar_view, menu);
 
         return true;
@@ -295,7 +353,6 @@ public class MainActivity extends AppCompatActivity {
         return ((TaskDataProviderFragment) fragment).getDataProvider();
     }
 
-
     /**
      * Notifies the Recycler View that the list has changed in some way, and it should
      * re-draw the list
@@ -323,8 +380,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        //Add code to load lists from the database, create menu items, and add them to the
-        //navigation menu
+        //Load lists into NavView
         final Menu navMenu = navigationView.getMenu();
         List<TaskList> listsFromDB = getDataProvider().getLoadedLists();
         if(!listsFromDB.isEmpty()) {
