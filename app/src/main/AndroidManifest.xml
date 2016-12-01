@@ -45,6 +45,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cs3398royal.remindme.remindme.MainActivity" />
         </activity>
+        <activity
+            android:name=".WeekActivity"
+            android:label="@string/title_activity_calendar"
+            android:parentActivityName=".CalendarActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cs3398royal.remindme.remindme.CalendarActivity" />
+        </activity>
     </application>
 
 </manifest>

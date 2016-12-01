@@ -15,5 +15,6 @@
     <string name="task_item_removed_text">You removed a task from the list!</string>
     <string name="snackbar_undo_text">UNDO</string>
     <string name='Calendar'>Calandar</string>
+    <string name='Week'>Week</string>
     <string name="title_activity_calendar">Calandar</string>
 </resources>

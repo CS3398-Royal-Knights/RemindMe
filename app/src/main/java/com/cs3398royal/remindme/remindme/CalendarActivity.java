@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +39,13 @@ import java.util.Locale;
  * Created by taylorhelton on 11/8/16.
  */
 
+//Create some tags to make finding our fragments a little easier
+
+
 public class CalendarActivity extends AppCompatActivity {
+
+//    private static final String FRAGMENT_TAG_DATA_PROVIDER = "data provider";
+//    private static final String FRAGMENT_TASK_LIST = "task list";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,40 +55,41 @@ public class CalendarActivity extends AppCompatActivity {
         //Set up toolbar for this activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        Intent i = getIntent();
+        Parcels.unwrap(i.getParcelableExtra("tasklist"));
 
-
-//        //Create a spinner dropdown for displaying lists that a task can be added to
-//        Spinner listSpinner = (Spinner)findViewById(R.id.list_dropdown);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.lists_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        listSpinner.setAdapter(adapter);
-//
-//        //Create a spinner for giving the task a priority
-//        Spinner prioritySpinner = (Spinner)findViewById(R.id.priority_spinner);
-//        ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
-//                R.array.priorities_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        prioritySpinner.setAdapter(priorityAdapter);
+//       getSupportFragmentManager().beginTransaction().add(new TaskDataProviderFragment(),
+//                FRAGMENT_TAG_DATA_PROVIDER).commit();
+//        getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TaskRecyclerViewFragment(),
+//                FRAGMENT_TASK_LIST).commit();
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.week_view, menu);
 
+        return true;
+    }
 
-
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        if(item.getItemId() == R.id.home) {
-            Intent productIntent = new Intent(CalendarActivity.this, MainActivity.class);
-            startActivity(productIntent);
-            return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.Weekview:
+                Intent i = new Intent(CalendarActivity.this, WeekActivity.class);
+                startActivity(i);
+                break;
+            case R.id.home:
+                Intent productIntent = new Intent(CalendarActivity.this, MainActivity.class);
+                startActivity(productIntent);
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
+
     }
 }
