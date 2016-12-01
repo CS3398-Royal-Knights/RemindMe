@@ -134,7 +134,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.calendarView:
-                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                Intent i = new Intent(MainActivity.this, CalendarActivity.class);
+
+                //Wrap the new task in a Parcel and put it as Extra.
+                i.putExtra("tasklist", Parcels.wrap(getDataProvider().getTaskList()));
+                //Done wrapping, can now set the result and send new
+                //task to the list
+                startActivity(i);
                 break;
             case R.id.action_sort:
                 //sort the tasks

@@ -118,6 +118,12 @@ public class TaskDataProvider {
         mLastRemovedPosition = position;
     }
 
+    public List<Task> getTaskList(){
+
+
+        return mData;
+    }
+
     /**
      * Transitions a task's checked state to true if it's not already checked,
      * and false if not. Also updates the task's new checked state in the DB
