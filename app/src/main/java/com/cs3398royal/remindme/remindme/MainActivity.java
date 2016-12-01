@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_sort:
                 //sort the tasks
+                getDataProvider().sortTasksByPriority();
+                updateRecyclerViewList();
                 break;
         }
 
