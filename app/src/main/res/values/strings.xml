@@ -6,7 +6,7 @@
     <string name="checkbox">Checkbox</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
-    <string name="title_activity_add_task">AddTaskActivity</string>
+    <string name="title_activity_add_task">Add a Task</string>
     <string name="enter_task_name">Enter Task Name</string>
     <string name="enter_due_date">Enter Due Date</string>
     <string name="add_details">Add a some more details about your task</string>

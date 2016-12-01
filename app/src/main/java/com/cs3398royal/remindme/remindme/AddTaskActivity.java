@@ -46,7 +46,6 @@ public class AddTaskActivity extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         //handles the Calendar pop up when the user presses the Due date box
         dateText = (EditText) findViewById(R.id.editText2);
         dateText.setInputType(InputType.TYPE_NULL);
