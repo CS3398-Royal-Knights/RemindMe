@@ -174,7 +174,7 @@ public class TaskDataProvider {
         return -1;
     }
 
-    public void loadListWithID(long listId) {
+    public void loadTasksFromListWithId(long listId) {
         //Remove all tasks from the data provider list
         //Load all tasks from the database that are associated with the input list
         //Set mCurrLoadedList to input param
@@ -289,7 +289,9 @@ public class TaskDataProvider {
         ArrayList<Date> dates = new ArrayList<>();
         for (int i = 0; i < mData.size(); i++)
         {
-            dates.add(mData.get(i).getDueDate());
+            if(mData.get(i).getDueDate() != null) {
+                dates.add(mData.get(i).getDueDate());
+            }
         }
         Collections.sort(dates);
         Collections.reverse(dates);
