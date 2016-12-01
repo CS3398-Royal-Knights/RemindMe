@@ -21,10 +21,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -144,8 +146,37 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_sort:
                 //sort the tasks
-                getDataProvider().sortTasksByPriority();
-                updateRecyclerViewList();
+                //MenuItem menuBtn = (MenuItem)findViewById(R.id.action_sort);
+                View menuItemView = findViewById(R.id.action_sort);
+                PopupMenu popup = new PopupMenu(MainActivity.this, menuItemView);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.show();
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id){
+                            case R.id.priority:
+                                getDataProvider().sortTasksByPriority();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.alpha:
+                                getDataProvider().sortTasksByAlpha();
+                                updateRecyclerViewList();
+                                break;
+                            case R.id.date:
+                                getDataProvider().sortTasksByDate();
+                                updateRecyclerViewList();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+
+
+                //getDataProvider().sortTasksByPriority();
+
                 break;
         }
 
