@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //When clicked, the AddTaskActivity is opened
                 Intent i = new Intent(MainActivity.this, AddTaskActivity.class);
+                i.putExtra("taskLists", Parcels.wrap(getDataProvider().getLoadedLists()));
                 startActivityForResult(i, REQUEST_ADD_TASK);
             }
         });
@@ -154,13 +155,12 @@ public class MainActivity extends AppCompatActivity {
             //Check to see if the AddTaskActivity completed successfully
             if(resultCode == RESULT_OK) {
                 int newIndex;
-                newIndex = getDataProvider().addTask((Task) Parcels.unwrap(data.getParcelableExtra("taskObject")));
+                Task newTask = Parcels.unwrap(data.getParcelableExtra("taskObject"));
+                long newTaskParentListId = newTask.getParentListId();
+                getDataProvider().addTask(newTask);
                 //If the index that the Task was added to is a valid index we
                 // tell the RecyclerView that the data set was updated.
-                if(newIndex >= 0) {
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TASK_LIST);
-                    ((TaskRecyclerViewFragment) fragment).notifyItemInserted(newIndex);
-                }
+                updateRecyclerViewList();
             }
         }
     }
@@ -330,7 +330,9 @@ public class MainActivity extends AppCompatActivity {
         if(!listsFromDB.isEmpty()) {
             for(TaskList list : listsFromDB) {
                 //Unsafe casting from long to int, could break the entire app but hey it works
-                navMenu.add(R.id.nav_user_lists, (int) list.getListId(), 1, list.getListName());
+                MenuItem newItem = navMenu.add(R.id.nav_user_lists, (int) list.getListId(), 1, list.getListName());
+                newItem.setCheckable(true);
+                newItem.setIcon(R.drawable.ic_list_black_24dp);
             }
         }
 
@@ -363,7 +365,10 @@ public class MainActivity extends AppCompatActivity {
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 //Add new list to database and add also to the menu
                                 long newListId = getDataProvider().createList(input.toString());
-                                nvDrawer.getMenu().add(R.id.nav_user_lists, (int) newListId, 1, input);
+                                MenuItem newItem = nvDrawer.getMenu().add(R.id.nav_user_lists,
+                                        (int) newListId, 1, input);
+                                newItem.setCheckable(true);
+                                newItem.setIcon(R.drawable.ic_list_black_24dp);
                                 mDrawerLayout.openDrawer(Gravity.LEFT);
                             }
                         }).show();

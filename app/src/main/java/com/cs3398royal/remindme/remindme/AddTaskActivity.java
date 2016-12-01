@@ -20,6 +20,7 @@ import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -30,10 +31,14 @@ public class AddTaskActivity extends AppCompatActivity {
     private Calendar mDueDate;
     private long mListId;
     private String mDescription;
+    Spinner listSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        Intent i = getIntent();
+        List<TaskList> taskLists = Parcels.unwrap(i.getParcelableExtra("taskLists"));
 
         //Set up toolbar for this activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,13 +69,17 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
         //Create a spinner dropdown for displaying lists that a task can be added to
-        Spinner listSpinner = (Spinner)findViewById(R.id.list_dropdown);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.lists_array, android.R.layout.simple_spinner_item);
+        listSpinner = (Spinner)findViewById(R.id.list_dropdown);
+        TaskList noneList = new TaskList();
+        noneList.setListName("None");
+        noneList.setListId(-2);
+        taskLists.add(0, noneList);
+        ArrayAdapter<TaskList> adapter = new ArrayAdapter<TaskList>(this, android.R.layout.simple_spinner_item, taskLists);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         listSpinner.setAdapter(adapter);
+        listSpinner.setSelection(0);
 
         //Create a spinner for giving the task a priority
         Spinner prioritySpinner = (Spinner)findViewById(R.id.priority_spinner);
@@ -80,6 +89,7 @@ public class AddTaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         prioritySpinner.setAdapter(priorityAdapter);
+        prioritySpinner.setSelection(0);
 
 
     }
@@ -129,27 +139,26 @@ public class AddTaskActivity extends AppCompatActivity {
      */
     Task createTaskFromInputFields(@NonNull String taskName) {
         Task tempTask = new Task(taskName);
+        TaskList tempList;
         EditText descBox = (EditText) findViewById(R.id.editText4);
         mDescription = descBox.getText().toString();
         Spinner priority = (Spinner)findViewById(R.id.priority_spinner);
         String priorityLevel = priority.getSelectedItem().toString();
-        if(priorityLevel.equals("!"))
+        if(priorityLevel.equals("None")) {
+            tempTask.setTaskPriority(0);
+        }
+        else if(priorityLevel.equals("Low"))
         {
             tempTask.setTaskPriority(1);
         }
-        else if (priorityLevel.equals("!!"))
+        else if (priorityLevel.equals("Medium"))
         {
             tempTask.setTaskPriority(2);
         }
-        else if (priorityLevel.equals("!!!"))
+        else if (priorityLevel.equals("High"))
         {
             tempTask.setTaskPriority(3);
         }
-        //TODO: Check input fields and add other values to task to complete implementation
-            //Due Date - DONE
-            //Description - DONE
-            //List
-            //Others as needed
         if(mDueDate != null) {
             tempTask.setDueDate(mDueDate.getTime());
         } else {
@@ -157,6 +166,10 @@ public class AddTaskActivity extends AppCompatActivity {
         }
         if(mDescription.trim().length() > 0) {
             tempTask.setDescription(mDescription.trim());
+        }
+        if(!(listSpinner.getSelectedItem() == null)) {
+            tempList = (TaskList) listSpinner.getSelectedItem();
+            tempTask.setParentListId(tempList.getListId());
         }
         return tempTask;
     }

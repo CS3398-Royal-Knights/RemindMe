@@ -18,6 +18,7 @@ import java.util.List;
  * Created by ttostado on 11/29/2016.
  */
 @Table(database = TaskListDatabase.class)
+@Parcel(value = Parcel.Serialization.BEAN, analyze = {TaskList.class})
 public class TaskList extends BaseModel {
     @Column
     @PrimaryKey(autoincrement = true)
@@ -44,5 +45,14 @@ public class TaskList extends BaseModel {
 
     public void setListName(String name) { listName = name; }
 
+    @Transient
+    public String toString() { return listName; }
 
+    @ParcelConstructor
+    public TaskList(String listName, long listId) {
+        this.listName = listName;
+        this.listId = listId;
+    }
+
+    public TaskList() {}
 }

@@ -152,16 +152,21 @@ public class TaskDataProvider {
 
         Task newTask = task;
         long newTaskParentListId = newTask.getParentListId();
-        //If the new task has a valid parent list Id (lists without valid ids are added to "uncategorized"
-        if(newTaskParentListId >= 0) {
             //If the currently loaded list is the same as the list the task is being added to
-            if(mCurrLoadedList.getListId() == newTaskParentListId) {
-                int insertedPos = 0;
-                mData.add(insertedPos, newTask);
-                task.save();
-                return insertedPos;
+            if(mCurrLoadedList != null) {
+                if(mCurrLoadedList.getListId() == -1) {
+                    int insertedPos = 0;
+                    mData.add(insertedPos, newTask);
+                    task.save();
+                    return insertedPos;
+                }
+                else if(mCurrLoadedList.getListId() == newTaskParentListId) {
+                    int insertedPos = 0;
+                    mData.add(insertedPos, newTask);
+                    task.save();
+                    return insertedPos;
+                }
             }
-        }
         //Otherwise we will save the task and return -1
         task.save();
         return -1;
@@ -203,7 +208,9 @@ public class TaskDataProvider {
      * Loads all tasks from the database into the mData list
      */
     public void loadAllTasks() {
+
         mData = SQLite.select().from(Task.class).queryList();
+        mCurrLoadedList = new TaskList("All", -1);
     }
 
     /**
@@ -222,6 +229,7 @@ public class TaskDataProvider {
     }
 
     public void loadUncategorizedTasks() {
-        mData = SQLite.select().from(Task.class).where(Task_Table.parentListId.eq(-1)).queryList();
+        mData = SQLite.select().from(Task.class).where(Task_Table.parentListId.eq(-2)).queryList();
+        mCurrLoadedList = new TaskList("Uncategorized", -2);
     }
 }
