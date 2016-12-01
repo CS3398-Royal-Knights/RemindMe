@@ -19,16 +19,18 @@ public class TaskDataProvider {
     private int mLastRemovedPosition;
     /* added by Taurino Tostado 11.29.16*/
     private List<TaskList> mLists;
+    private TaskList mCurrLoadedList;
 
 
     public TaskDataProvider() {
         mData = new LinkedList<>();
         //Initialize list to all tasks in database, this is like
         //displaying "all lists"
-        mData = SQLite.select().from(Task.class).queryList();
+        
         /*Added by Taurino Tostado 11.29.16*/
-        //Load
         mLists = SQLite.select().from(TaskList.class).queryList();
+        //Load all tasks list by default
+        loadAllTasks();
     }
 
     public int getCount() {
@@ -145,22 +147,27 @@ public class TaskDataProvider {
      * to a different list than the current list.
      */
     public int addTask(Task task) {
-        //TODO: check list associated with task to see if it's the current list & add if it is, else save to DB only
         //(save to DB will automatically save the item properly, and it will be loaded
         //next time the list is loaded)
 
-        //By default we'll add the task to the top of the list
         Task newTask = task;
-        int insertedPos = 0;
-        mData.add(insertedPos, newTask);
+        long newTaskParentListId = newTask.getParentListId();
+        //If the new task has a valid parent list Id (lists without valid ids are added to "uncategorized"
+        if(newTaskParentListId >= 0) {
+            //If the currently loaded list is the same as the list the task is being added to
+            if(mCurrLoadedList.getListId() == newTaskParentListId) {
+                int insertedPos = 0;
+                mData.add(insertedPos, newTask);
+                task.save();
+                return insertedPos;
+            }
+        }
+        //Otherwise we will save the task and return -1
         task.save();
-        return insertedPos;
+        return -1;
     }
 
-    public void loadListWithID(long listId) {
-        //Remove all tasks from the data provider list
-        //Load all tasks from the database that are associated with the input list
-        //Set mCurrLoadedList to input param
+    public void loadTasksFromListWithId(long listId) {
         TaskList tempList = null;
         for (int i = 0; i < mLists.size(); i++) {
             if (mLists.get(i).getListId() == listId) {
@@ -170,6 +177,50 @@ public class TaskDataProvider {
         if (tempList != null) {
             mData.clear();
             mData = tempList.getChildTasks();
+            mCurrLoadedList = tempList;
         }
+    }
+
+    /**
+     * Checks to see if a list with the given Id exists
+     * @param listId    The Id of the list being checked for existance
+     * @return  true if the list exists, false otherwise
+     */
+    private boolean listWithIdExists(long listId) {
+        //This uses a linear search for iterating through
+        //the list container, in the real world this would
+        //be very impractical but we can use it here since we dont
+        //expect to have a million lists
+        for(int i = 0; i < mLists.size(); i++) {
+            if(listId == mLists.get(i).getListId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Loads all tasks from the database into the mData list
+     */
+    public void loadAllTasks() {
+        mData = SQLite.select().from(Task.class).queryList();
+    }
+
+    /**
+     * Creates a new list and saves it to the database.
+     * @param listName  The name of the new list being created.
+     */
+    public long createList(String listName) {
+        TaskList newList = new TaskList();
+        newList.setListName(listName);
+        return newList.insert();
+    }
+
+    public List<TaskList> getLoadedLists() {
+        return mLists;
+    }
+
+    public void loadUncategorizedTasks() {
+        mData = SQLite.select().from(Task.class).where(Task_Table.parentListId.eq(-1)).queryList();
     }
 }

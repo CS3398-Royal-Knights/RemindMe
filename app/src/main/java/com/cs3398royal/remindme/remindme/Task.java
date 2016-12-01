@@ -6,7 +6,6 @@ import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;

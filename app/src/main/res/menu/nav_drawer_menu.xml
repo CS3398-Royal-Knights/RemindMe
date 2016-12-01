@@ -5,26 +5,32 @@
         by the dynamic menu list of TaskLists, and
         the static menu items to add a list and settings-->
     <group android:checkableBehavior="single"
-            android:id="@+id/nav_lists">
+            android:id="@+id/nav_default_lists">
         <item
-            android:id="@+id/nav_first_fragment"
+            android:orderInCategory="0"
+            android:id="@+id/nav_all_tasks_option"
             android:icon="@drawable/ic_check_black_24dp"
-            android:title="First" />
+            android:title="All Tasks" />
         <item
-            android:id="@+id/nav_second_fragment"
-            android:title="Second" />
-        <item
-            android:id="@+id/nav_third_fragment"
-            android:title="Third" />
+            android:orderInCategory="0"
+            android:id="@+id/nav_uncategorized_tasks_option"
+            android:icon="@drawable/ic_check_black_24dp"
+            android:title="Uncategorized Tasks" />
+    </group>
+    <group android:checkableBehavior="single"
+            android:id="@+id/nav_user_lists" >
+        <!--This is where our user created lists will go-->
     </group>
     <group android:id="@+id/nav_footer"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/settings_item"
+            android:orderInCategory="999"
+            android:id="@+id/nav_settings_option"
             android:icon="@drawable/ic_settings_black_24px"
             android:title="Settings" />
         <item
-            android:id="@+id/feedback_item"
+            android:orderInCategory="999"
+            android:id="@+id/nav_feedback_option"
             android:icon="@drawable/ic_feedback_black_24px"
             android:title="Send Feedback"
             android:checkable="false"/>

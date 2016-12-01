@@ -1,47 +1,29 @@
 package com.cs3398royal.remindme.remindme;
 
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.net.Uri;
-import android.graphics.Color;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
-import com.raizlabs.android.dbflow.config.FlowConfig;
-import com.raizlabs.android.dbflow.config.FlowManager;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.parceler.Parcels;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -68,19 +50,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupToolbar();
 
-        //recieves data when the add activity task is the most recent activity
-//        String data;
-//        if (savedInstanceState == null) {
-//            Bundle extras = getIntent().getExtras();
-//            if(extras == null) {
-//                data= null;
-//            } else {
-//                data= extras.getString("taskName");
-//            }
-//        } else {
-//            data= (String) savedInstanceState.getSerializable("taskName");
-//        }
-//        System.out.println(data + " Has been entered");
+
+        //Create the data provider fragment before anything else is done, so we can start loading
+        //things into the app
+
 
         //Initialize views
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         //Initialize NavigationView and setup click actions to inflate our views
         nvDrawer = (NavigationView) findViewById(R.id.left_drawer);
         headerLayout = nvDrawer.getHeaderView(0);
-        setupDrawerContent(nvDrawer);
         setHeaderLayoutClickListener(headerLayout);
 
         //Set up ActionBarDrawerToggle
@@ -120,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 FRAGMENT_TAG_DATA_PROVIDER).commit();
         getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TaskRecyclerViewFragment(),
                 FRAGMENT_TASK_LIST).commit();
-
-
     }
 
     /**
@@ -151,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+        setupDrawerContent(nvDrawer);
     }
 
     @Override
@@ -239,31 +210,18 @@ public class MainActivity extends AppCompatActivity {
      * @param pos   An int that is the position of the item in the RecyclerView
      */
     public void onItemClicked(int pos) {
-        //Currently only creates a Snackbar with the Due Date for testing purposes.
+        //Currently only creates a Snackbar with the description for testing purposes.
         // If we decide to do something when a task is clicked, the code for it goes here.
         //Some things we could do are maybe expand the item to show the "details" for the
         //item??
-        Date taskDueDate = getDataProvider().getItem(pos).getDueDate();
-        String dueDateStr;
-        if(taskDueDate != null) {
-            dueDateStr = "Task is due: " + DateFormat.getDateInstance().format(taskDueDate);
-        } else {
-            dueDateStr = "Task has no due date.";
+        String descStr = getDataProvider().getItem(pos).getDescription();
+        if(descStr != null && descStr.trim() != "") {
+            Snackbar snackbar = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    descStr,
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
-        int priority = getDataProvider().getItem(pos).getTaskPriority();
-        String priorityStr="";
-        if(priority == 1)
-            priorityStr = "; Task is low priority";
-        if(priority == 2)
-            priorityStr = "; Task is medium priority";
-        if(priority == 3)
-            priorityStr = "; Task is high priority";
-        dueDateStr += priorityStr;
-        Snackbar snackbar = Snackbar.make(
-                findViewById(R.id.main_content),
-                dueDateStr,
-                Snackbar.LENGTH_LONG);
-        snackbar.show();
     }
 
     /**
@@ -336,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
         return ((TaskDataProviderFragment) fragment).getDataProvider();
     }
 
+
     /**
      * Notifies the Recycler View that the list has changed in some way, and it should
      * re-draw the list
@@ -365,6 +324,18 @@ public class MainActivity extends AppCompatActivity {
                 });
         //Add code to load lists from the database, create menu items, and add them to the
         //navigation menu
+        final Menu navMenu = navigationView.getMenu();
+        List<TaskList> listsFromDB = getDataProvider().getLoadedLists();
+        if(!listsFromDB.isEmpty()) {
+            for(TaskList list : listsFromDB) {
+                //Unsafe casting from long to int, could break the entire app but hey it works
+                navMenu.add(R.id.nav_user_lists, (int) list.getListId(), 1, list.getListName());
+            }
+        }
+
+        //Set All Tasks as our default list
+        navMenu.findItem(R.id.nav_all_tasks_option).setChecked(true);
+        selectDrawerItem(navMenu.findItem(R.id.nav_all_tasks_option));
 
     }
 
@@ -382,9 +353,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mDrawerLayout.closeDrawers();
                 //TODO: Make this click handler create an intent to a New List Activity
-                Snackbar youDidIt = Snackbar.make(findViewById(R.id.main_content),
-                        "You pressed the Add List Button!", Snackbar.LENGTH_LONG);
-                youDidIt.show();
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title("Create a New List")
+                        .content("Give your list a name: ")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input("List Name", null, false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                //Add new list to database and add also to the menu
+                                long newListId = getDataProvider().createList(input.toString());
+                                nvDrawer.getMenu().add(R.id.nav_user_lists, (int) newListId, 1, input);
+                            }
+                        }).show();
             }
         });
     }
@@ -409,17 +389,31 @@ public class MainActivity extends AppCompatActivity {
      *             hasSubMenu() on the item.
      */
     public void selectDrawerItem(MenuItem item) {
-        //Highlight selected item, we won't do this for add list item
+        //Highlight selected item
         if(item.isCheckable())
             item.setChecked(true);
-        //Set the action bar title to item title, again not for add list item
+        //Set the action bar title to item title
         setTitle(item.getTitle());
-
-        //Pass the list ID (MenuItem.getId()) to the DataProvider to load all tasks associated
-            //with that list
-        //Create a new TaskRecyclerViewFragment, passing getDataProvider() to the consturctor
-        //Replace the current Fragment with new Recycler Fragment
-
+        //If all tasks option is selected, load all tasks
+        if(item.getItemId() == R.id.nav_all_tasks_option) {
+            getDataProvider().loadAllTasks();
+            //We create a completely new fragment in case the content frame has something other than a list
+            //in it (like the settings page)
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TaskRecyclerViewFragment(),
+                    FRAGMENT_TASK_LIST).commit();
+        }
+        //If uncategorized is selected, load all tasks where the parent list id is -1
+        else if(item.getItemId() == R.id.nav_uncategorized_tasks_option) {
+            getDataProvider().loadUncategorizedTasks();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TaskRecyclerViewFragment(),
+                    FRAGMENT_TASK_LIST).commit();
+        }
+        //If the item is one of the user's lists, load it from the database
+        else if(item.getGroupId() == R.id.nav_user_lists) {
+            getDataProvider().loadTasksFromListWithId(item.getItemId());
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TaskRecyclerViewFragment(),
+                    FRAGMENT_TASK_LIST).commit();
+        }
         //Close the nav drawer
         mDrawerLayout.closeDrawers();
     }
