@@ -4,9 +4,11 @@ import android.os.Parcel;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Chris on 11/7/2016.
@@ -195,6 +197,47 @@ public class TaskDataProvider {
             if( mData.get(i).getTaskPriority() == 3 )
             {
                 moveToTop(i);
+            }
+        }
+
+    }
+
+    public void sortTasksByAlpha(){
+        ArrayList<String> names = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++)
+        {
+            names.add(mData.get(i).getTaskName());
+        }
+        Collections.sort(names);
+        Collections.reverse(names);
+        for (int i = 0; i < names.size(); i++)
+        {
+            for (int j = 0; j < mData.size(); j++)
+            {
+                if(names.get(i).equals( mData.get(j).getTaskName()))
+                {
+                    moveToTop(j);
+                }
+            }
+        }
+    }
+
+    public void sortTasksByDate(){
+        ArrayList<Date> dates = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++)
+        {
+            dates.add(mData.get(i).getDueDate());
+        }
+        Collections.sort(dates);
+        Collections.reverse(dates);
+        for (int i = 0; i < dates.size(); i++)
+        {
+            for (int j = 0; j < mData.size(); j++)
+            {
+                if(dates.get(i).equals( mData.get(j).getDueDate()))
+                {
+                    moveToTop(j);
+                }
             }
         }
 
