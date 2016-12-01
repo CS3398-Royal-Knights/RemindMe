@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -141,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.calendarView:
                 startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                 break;
+            case R.id.action_sort:
+                //sort the tasks
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -196,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sort_task_menu, menu);
         getMenuInflater().inflate(R.menu.calendar_view, menu);
 
         return true;

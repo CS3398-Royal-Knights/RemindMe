@@ -16,4 +16,5 @@
     <string name="snackbar_undo_text">UNDO</string>
     <string name='Calendar'>Calandar</string>
     <string name="title_activity_calendar">Calandar</string>
+    <string name="sort">Sort</string>
 </resources>
