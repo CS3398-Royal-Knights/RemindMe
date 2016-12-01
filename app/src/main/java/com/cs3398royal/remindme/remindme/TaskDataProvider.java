@@ -213,6 +213,7 @@ public class TaskDataProvider {
     public long createList(String listName) {
         TaskList newList = new TaskList();
         newList.setListName(listName);
+        mLists.add(newList);
         return newList.insert();
     }
 

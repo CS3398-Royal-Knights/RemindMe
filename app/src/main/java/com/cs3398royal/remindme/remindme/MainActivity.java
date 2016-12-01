@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -363,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
                                 //Add new list to database and add also to the menu
                                 long newListId = getDataProvider().createList(input.toString());
                                 nvDrawer.getMenu().add(R.id.nav_user_lists, (int) newListId, 1, input);
+                                mDrawerLayout.openDrawer(Gravity.LEFT);
                             }
                         }).show();
             }
