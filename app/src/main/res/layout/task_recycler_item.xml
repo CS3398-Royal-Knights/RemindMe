@@ -48,7 +48,7 @@
             android:layout_height="match_parent" >
             <View
                 android:id="@+id/task_priority"
-                android:layout_width="4dp"
+                android:layout_width="4.2dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:layout_alignParentLeft="true"

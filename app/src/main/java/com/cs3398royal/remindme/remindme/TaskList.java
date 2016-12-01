@@ -20,7 +20,7 @@ import java.util.List;
 @Table(database = TaskListDatabase.class)
 public class TaskList extends BaseModel {
     @Column
-    @PrimaryKey (autoincrement = true)
+    @PrimaryKey(autoincrement = true)
     private long listId;
 
     @Column
@@ -29,23 +29,20 @@ public class TaskList extends BaseModel {
     List<Task> childTasks;
 
     @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "childTasks")
-    public List<Task> getChildTasks(){
-        if(childTasks == null || childTasks.isEmpty())
-        {
+    public List<Task> getChildTasks() {
+        if (childTasks == null || childTasks.isEmpty()) {
             childTasks = SQLite.select().from(Task.class).where(Task_Table.parentListId.eq(listId)).queryList();
         }
         return childTasks;
     }
-    public long getListId(){return listId;}
-    public void setListId(long id){listId = id;}
 
-    public String getListName() {return listName;}
-    public void setListName(String name ) {listName = name;}
+    public long getListId() { return listId; }
 
+    public void setListId(long id) { listId = id; }
 
+    public String getListName() { return listName; }
 
-
-
+    public void setListName(String name) { listName = name; }
 
 
 }

@@ -180,7 +180,6 @@ public class TaskRecyclerAdapter
                 holder.mPriority.setBackgroundColor(Color.parseColor("#43A047"));
                 break;
             case 2:
-
                 holder.mPriority.setBackgroundColor(Color.parseColor("#f1c40f"));
                 break;
             case 3:

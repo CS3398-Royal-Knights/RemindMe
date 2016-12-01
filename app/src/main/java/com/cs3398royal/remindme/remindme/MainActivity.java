@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -340,6 +342,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Notifies the Recycler View that the list has changed in some way, and it should
+     * re-draw the list
+     */
+    private void updateRecyclerViewList() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TASK_LIST);
+        ((TaskRecyclerViewFragment) fragment).notifyDataSetChanged();
+    }
+
+    /**
      * This method sets up an ItemSelectedListener for our
      * navigation view that captures the menu item that was
      * selected and passes it to selectDrawerItem to be
@@ -357,7 +368,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-        navigationView.setItemIconTintList(null);
         //Add code to load lists from the database, create menu items, and add them to the
         //navigation menu
 
