@@ -193,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -332,6 +334,15 @@ public class MainActivity extends AppCompatActivity {
     public TaskDataProvider getDataProvider() {
         final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_DATA_PROVIDER);
         return ((TaskDataProviderFragment) fragment).getDataProvider();
+    }
+
+    /**
+     * Notifies the Recycler View that the list has changed in some way, and it should
+     * re-draw the list
+     */
+    private void updateRecyclerViewList() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TASK_LIST);
+        ((TaskRecyclerViewFragment) fragment).notifyDataSetChanged();
     }
 
     /**

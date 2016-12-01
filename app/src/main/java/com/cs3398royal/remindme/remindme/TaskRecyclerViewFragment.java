@@ -169,4 +169,8 @@ public class TaskRecyclerViewFragment extends Fragment {
         mAdapter.notifyItemInserted(pos);
         mRecyclerView.scrollToPosition(pos);
     }
+
+    public void notifyDataSetChanged() {
+        mAdapter.notifyDataSetChanged();
+    }
 }
