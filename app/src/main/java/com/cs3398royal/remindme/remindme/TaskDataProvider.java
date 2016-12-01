@@ -172,4 +172,31 @@ public class TaskDataProvider {
             mData = tempList.getChildTasks();
         }
     }
+
+    public void sortTasksByPriority(){
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 1 )
+            {
+                moveToTop(i);
+            }
+        }
+
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 2 )
+            {
+                moveToTop(i);
+            }
+        }
+
+        for(int i = 0; i < mData.size(); i++)
+        {
+            if( mData.get(i).getTaskPriority() == 3 )
+            {
+                moveToTop(i);
+            }
+        }
+
+    }
 }
