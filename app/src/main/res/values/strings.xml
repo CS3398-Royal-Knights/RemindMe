@@ -17,7 +17,7 @@
     <string name='Calendar'>Calendar</string>
     <string name='Week'>Week</string>
     <string name="Day">Day</string>
-    <string name="title_activity_calendar">Calendar</string>
+    <string name="title_activity_calendar">Month</string>
     <string name="title_activity_week">Week</string>
     <string name="sort">Sort</string>
     <string name="title_activity_day">Day</string>
