@@ -9,8 +9,7 @@ public class CommonMethod {
 	public static String convertWeekDays(String date) {
 		String formattedDate = null;
 		try {
-			SimpleDateFormat originalFormat = new SimpleDateFormat(
-					"yyyy-MM-dd", Locale.ENGLISH);
+			SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 			SimpleDateFormat targetFormat = new SimpleDateFormat("dd");
 			Date date12 = originalFormat.parse(date);
 			formattedDate = targetFormat.format(date12);
@@ -30,13 +29,14 @@ public class CommonMethod {
 		try
 			{
 				SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd" , Locale.ENGLISH);
-				SimpleDateFormat targetFormat = new SimpleDateFormat("MMM yyyy");
+				SimpleDateFormat targetFormat = new SimpleDateFormat("EEE, MMM dd, yyyy");
 				Date date12 = originalFormat.parse(date);
 				formattedDate = targetFormat.format(date12);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
+
 
 		return formattedDate;
 

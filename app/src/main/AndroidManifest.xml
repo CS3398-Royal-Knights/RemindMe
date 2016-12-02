@@ -48,11 +48,20 @@
         <activity
             android:name=".WeekActivity"
             android:label="@string/title_activity_week"
-            android:parentActivityName=".CalendarActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cs3398royal.remindme.remindme.CalendarActivity" />
+                android:value="com.cs3398royal.remindme.remindme.MainActivity" />
+        </activity>
+        <activity
+            android:name=".DayActivity"
+            android:label="@string/title_activity_day"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cs3398royal.remindme.remindme.MainActivity" />
         </activity>
     </application>
 

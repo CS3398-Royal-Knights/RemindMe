@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 
@@ -29,7 +30,7 @@ import android.widget.TextView;
  * Created by taylorhelton on 12/1/16.
  */
 
-public class WeekActivity extends CalendarActivity{
+public class WeekActivity extends AppCompatActivity{
 
 
     private TextView textViewDate;
@@ -114,13 +115,34 @@ public class WeekActivity extends CalendarActivity{
 
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.calendar_view, menu);
+        getMenuInflater().inflate(R.menu.week_view,menu);
+        getMenuInflater().inflate(R.menu.day_view, menu);
+        return true;
+    }
+
     public boolean onOptionsItemSelected(MenuItem item){
 
-        if(item.getItemId() == R.id.home) {
-            Intent productIntent = new Intent(WeekActivity.this, CalendarActivity.class);
-            startActivity(productIntent);
-            return true;
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.calendarView:
+                Intent i = new Intent(WeekActivity.this, CalendarActivity.class);
+                startActivity(i);
+                break;
+            case R.id.DayView:
+                Intent Day = new Intent(WeekActivity.this, DayActivity.class);
+                startActivity(Day);
+                break;
+            case R.id.home:
+                Intent productIntent = new Intent(WeekActivity.this, MainActivity.class);
+                startActivity(productIntent);
+                return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -71,7 +71,9 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.week_view, menu);
+        getMenuInflater().inflate(R.menu.calendar_view, menu);
+        getMenuInflater().inflate(R.menu.week_view,menu);
+        getMenuInflater().inflate(R.menu.day_view, menu);
 
         return true;
     }
@@ -83,13 +85,17 @@ public class CalendarActivity extends AppCompatActivity {
                 Intent i = new Intent(CalendarActivity.this, WeekActivity.class);
                 startActivity(i);
                 break;
+            case R.id.DayView:
+                Intent Day = new Intent(CalendarActivity.this, DayActivity.class);
+                startActivity(Day);
+                break;
             case R.id.home:
                 Intent productIntent = new Intent(CalendarActivity.this, MainActivity.class);
                 startActivity(productIntent);
                 return true;
         }
 
-        return super.onOptionsItemSelected(item);
 
+        return super.onOptionsItemSelected(item);
     }
 }
