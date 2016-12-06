@@ -27,7 +27,8 @@
             android:orderInCategory="999"
             android:id="@+id/nav_settings_option"
             android:icon="@drawable/ic_settings_black_24px"
-            android:title="Settings" />
+            android:title="Settings"
+            android:checkable="false" />
         <item
             android:orderInCategory="999"
             android:id="@+id/nav_feedback_option"

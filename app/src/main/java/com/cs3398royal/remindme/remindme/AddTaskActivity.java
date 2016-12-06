@@ -10,16 +10,18 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,25 +34,64 @@ public class AddTaskActivity extends AppCompatActivity {
     private long mListId;
     private String mDescription;
     Spinner listSpinner;
+    Spinner prioritySpinner;
+    EditText taskNameText;
+    EditText descBox;
+    boolean isEditMode;
+    int editablePriority;
+    long editableParentListId;
+    boolean isEditableTaskChecked;
+    int editableTaskIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+
+        dateText = (EditText) findViewById(R.id.edit_text_due_date);
+        listSpinner = (Spinner)findViewById(R.id.list_dropdown);
+        prioritySpinner = (Spinner)findViewById(R.id.priority_spinner);
+        dateFormatter = new SimpleDateFormat("E, MMM dd, yyyy", Locale.US);
+        taskNameText = (EditText) findViewById(R.id.edit_text_task_name);
+        descBox = (EditText) findViewById(R.id.edit_text_task_description);
+
         Intent i = getIntent();
         List<TaskList> taskLists = Parcels.unwrap(i.getParcelableExtra("taskLists"));
+        if(i.getIntExtra("request_code", 0) == 2) {
+            isEditMode = true;
+            setTitle("Edit Task");
+            Task editableTask = (Task) Parcels.unwrap(i.getParcelableExtra("taskToEdit"));
+            //Get Variables from task
+            Date editableDueDate = editableTask.getDueDate();
+            editablePriority = editableTask.getTaskPriority();
+            String editableName = editableTask.getTaskName();
+            String editableDesc = editableTask.getDescription();
+            editableParentListId = editableTask.getParentListId();
+            isEditableTaskChecked = editableTask.isChecked();
+            editableTaskIndex = i.getIntExtra("task_index", -1);
 
+            //Initialize the views
+            if(editableDueDate != null) {
+                dateText.setText(dateFormatter.format(editableDueDate));
+                mDueDate = Calendar.getInstance();
+                mDueDate.setTime(editableDueDate);
+            }
+            taskNameText.setText(editableName);
+            descBox.setText(editableDesc);
+        }
         //Set up toolbar for this activity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         //handles the Calendar pop up when the user presses the Due date box
-        dateText = (EditText) findViewById(R.id.editText2);
+
         dateText.setInputType(InputType.TYPE_NULL);
         Calendar newCalendar = Calendar.getInstance();
-        dateFormatter = new SimpleDateFormat("E, MMM dd, yyyy", Locale.US);
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener(){
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
                 mDueDate = Calendar.getInstance();
@@ -68,28 +109,36 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
         //Create a spinner dropdown for displaying lists that a task can be added to
-        listSpinner = (Spinner)findViewById(R.id.list_dropdown);
+
         TaskList noneList = new TaskList();
         noneList.setListName("None");
         noneList.setListId(-2);
         taskLists.add(0, noneList);
-        ArrayAdapter<TaskList> adapter = new ArrayAdapter<TaskList>(this, android.R.layout.simple_spinner_item, taskLists);
+        ArrayAdapter<TaskList> adapter = new ArrayAdapter<TaskList>(this, R.layout.add_task_activity_spinner_item, taskLists);
         // Specify the layout to use when the list of choices appears
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         listSpinner.setAdapter(adapter);
-        listSpinner.setSelection(0);
+
 
         //Create a spinner for giving the task a priority
-        Spinner prioritySpinner = (Spinner)findViewById(R.id.priority_spinner);
+
         ArrayAdapter<CharSequence> priorityAdapter = ArrayAdapter.createFromResource(this,
-                R.array.priorities_array, android.R.layout.simple_spinner_item);
+                R.array.priorities_array, R.layout.add_task_activity_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         prioritySpinner.setAdapter(priorityAdapter);
-        prioritySpinner.setSelection(0);
 
+
+        if(!isEditMode) {
+            listSpinner.setSelection(0);
+            prioritySpinner.setSelection(0);
+        }
+        else {
+            listSpinner.setSelection((int) editableParentListId);
+            prioritySpinner.setSelection(editablePriority);
+        }
 
     }
 
@@ -105,10 +154,16 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        EditText text = (EditText) findViewById(R.id.editText);
-        String task = text.getText().toString();
-        if (task.trim().length() == 0)
+
+        String task = taskNameText.getText().toString();
+        if (task.trim().length() == 0) {
+            new MaterialDialog.Builder(this)
+                    .title("Whoops!")
+                    .content("The Task Name field can't be empty. Give your task a name and try again.")
+                    .positiveText("OK")
+                    .show();
             return false;
+        }
         switch (id) {
             case R.id.action_add:
                 Task newTask = createTaskFromInputFields(task.trim());
@@ -116,6 +171,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 //Wrap the new task in a Parcel and put it as Extra.
                 i.putExtra("taskObject", Parcels.wrap(newTask));
+                i.putExtra("task_index", editableTaskIndex);
                 //Done wrapping, can now set the result and send new
                 //task to the list
                 setResult(RESULT_OK, i);
@@ -139,10 +195,10 @@ public class AddTaskActivity extends AppCompatActivity {
     Task createTaskFromInputFields(@NonNull String taskName) {
         Task tempTask = new Task(taskName);
         TaskList tempList;
-        EditText descBox = (EditText) findViewById(R.id.editText4);
+
         mDescription = descBox.getText().toString();
-        Spinner priority = (Spinner)findViewById(R.id.priority_spinner);
-        String priorityLevel = priority.getSelectedItem().toString();
+
+        String priorityLevel = prioritySpinner.getSelectedItem().toString();
         if(priorityLevel.equals("None")) {
             tempTask.setTaskPriority(0);
         }
@@ -169,6 +225,9 @@ public class AddTaskActivity extends AppCompatActivity {
         if(!(listSpinner.getSelectedItem() == null)) {
             tempList = (TaskList) listSpinner.getSelectedItem();
             tempTask.setParentListId(tempList.getListId());
+        }
+        if(isEditMode && isEditableTaskChecked) {
+            tempTask.setChecked(true);
         }
         return tempTask;
     }

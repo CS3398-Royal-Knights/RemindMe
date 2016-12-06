@@ -39,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         int id = item.getItemId();
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        switch (id){
+                        switch (id) {
                             case R.id.priority:
                                 getDataProvider().sortTasksByPriority();
                                 updateRecyclerViewList();
@@ -201,22 +202,21 @@ public class MainActivity extends AppCompatActivity {
      * an intent. This function is used to pass information between this activity
      * and other activities by passing an intent back once the created activity has
      * finished.
-     * @param requestCode   The request code that this activity sent when creating
-     *                      the other activity.
      *
-     * @param resultCode    An integer that is the result code that the created activity
-     *                      sends back to this activity upon finishing.
-     *
-     * @param data  An Intent that contains the information being passed back to this
-     *              activity by the created activity upon finishing. This Intent can contain
-     *              extras including strings and possibly a parcelable.
+     * @param requestCode The request code that this activity sent when creating
+     *                    the other activity.
+     * @param resultCode  An integer that is the result code that the created activity
+     *                    sends back to this activity upon finishing.
+     * @param data        An Intent that contains the information being passed back to this
+     *                    activity by the created activity upon finishing. This Intent can contain
+     *                    extras including strings and possibly a parcelable.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Check to see if the result we get is from the AddTaskActivity
-        if(requestCode == REQUEST_ADD_TASK) {
-            //Check to see if the AddTaskActivity completed successfully
-            if(resultCode == RESULT_OK) {
+        //Check to see if the result is successful
+        if (resultCode == RESULT_OK) {
+            //Check to see if the result is an edit or an add
+            if (requestCode == REQUEST_ADD_TASK) {
                 int newIndex;
                 Task newTask = Parcels.unwrap(data.getParcelableExtra("taskObject"));
                 long newTaskParentListId = newTask.getParentListId();
@@ -225,9 +225,24 @@ public class MainActivity extends AppCompatActivity {
                 // tell the RecyclerView that the data set was updated.
                 updateRecyclerViewList();
             }
+            else if(requestCode == REQUEST_EDIT_TASK) {
+                int taskIndex = data.getIntExtra("task_index", -1);
+                Task editedTask = Parcels.unwrap(data.getParcelableExtra("taskObject"));
+                if(taskIndex >= 0) {
+                    getDataProvider().replaceItemWithTask(taskIndex, editedTask);
+                    updateRecyclerViewList();
+                }
+                else {
+                    String editError = "Something broke! We couldn't make the changes you were looking for :( please try again.";
+                    Snackbar snackbar = Snackbar.make(
+                            findViewById(R.id.main_content),
+                            editError,
+                            Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
         }
     }
-
 
 
     @Override
@@ -272,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Do something when a particular task in the list of tasks is clicked.
-     * @param pos   An int that is the position of the item in the RecyclerView
+     *
+     * @param pos An int that is the position of the item in the RecyclerView
      */
     public void onItemClicked(int pos) {
         //Currently only creates a Snackbar with the description for testing purposes.
@@ -280,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
         //Some things we could do are maybe expand the item to show the "details" for the
         //item??
         String descStr = getDataProvider().getItem(pos).getDescription();
-        if(descStr != null && descStr.trim() != "") {
+        if (descStr != null && descStr.trim() != "") {
             Snackbar snackbar = Snackbar.make(
                     findViewById(R.id.main_content),
                     descStr,
@@ -294,26 +310,33 @@ public class MainActivity extends AppCompatActivity {
      * of the task that is at the position position. It will then update the task at the position
      * in the data provider, and notify the recycler view that the task has changed
      *
-     * @param position  An int that is the position of the item in the RecyclerView list.
+     * @param position An int that is the position of the item in the RecyclerView list.
      */
     public void onItemViewEditOptionClicked(int position) {
-        //TODO: create an edit task fragment/activity for editing the details of a task
-
-        //Currently we will create a snackbar that shows that we clicked the edit button
-        //for a task.
-        String editPressed = "You pressed edit for item " + getDataProvider().getItem(position).getTaskName();
-        Snackbar snackbar = Snackbar.make(
-                findViewById(R.id.main_content),
-                editPressed,
-                Snackbar.LENGTH_LONG);
-        snackbar.show();
+        Task editTask = getDataProvider().getItem(position);
+        if (editTask != null) {
+            Intent i = new Intent(MainActivity.this, AddTaskActivity.class);
+            i.putExtra("taskLists", Parcels.wrap(getDataProvider().getLoadedLists()));
+            i.putExtra("taskToEdit", Parcels.wrap(editTask));
+            i.putExtra("request_code", REQUEST_EDIT_TASK);
+            i.putExtra("task_index", position);
+            startActivityForResult(i, REQUEST_EDIT_TASK);
+        } else {
+            String editError = "Something broke! We couldn't find the task you were looking for! :(";
+            Snackbar snackbar = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    editError,
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     /**
      * Do something when a task that is currently loaded has its checked state changed.
-     * @param position  The position of the task in the list
-     * @param checkedState  The new checked state for the task that was changed.
-     *                      Set to true if the task is "completed" and false otherwise.
+     *
+     * @param position     The position of the task in the list
+     * @param checkedState The new checked state for the task that was changed.
+     *                     Set to true if the task is "completed" and false otherwise.
      */
     public void onItemCheckedStateChanged(int position, boolean checkedState) {
         //For testing purposes we will create a snackbar that just tells us we (un)checked the task.
@@ -322,13 +345,12 @@ public class MainActivity extends AppCompatActivity {
                 + "\" as completed!";
         String taskIncomplete = "You set the task \"" + getDataProvider().getItem(position).getTaskName()
                 + "\" as not completed!";
-        if(checkedState) {
+        if (checkedState) {
             snackbar = Snackbar.make(
                     findViewById(R.id.main_content),
                     taskCompleted,
                     Snackbar.LENGTH_LONG);
-        }
-        else {
+        } else {
             snackbar = Snackbar.make(
                     findViewById(R.id.main_content),
                     taskIncomplete,
@@ -345,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
         //Ask the data provider to insert the last item that it removed back into
         //the list
         int pos = getDataProvider().undoLastRemoval();
-        if(pos >= 0) {
+        if (pos >= 0) {
             //If the data provider has successfully added the item back to the list, we notify the
             //recycler view that the item was added back to the list so it can update the visual list
             //it's displaying
@@ -380,7 +402,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override//@NonNull means the MenuItem object passed to this function can't be null
+                    @Override
+//@NonNull means the MenuItem object passed to this function can't be null
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         selectDrawerItem(menuItem);
                         return true;
@@ -389,8 +412,8 @@ public class MainActivity extends AppCompatActivity {
         //Load lists into NavView
         final Menu navMenu = navigationView.getMenu();
         List<TaskList> listsFromDB = getDataProvider().getLoadedLists();
-        if(!listsFromDB.isEmpty()) {
-            for(TaskList list : listsFromDB) {
+        if (!listsFromDB.isEmpty()) {
+            for (TaskList list : listsFromDB) {
                 //Unsafe casting from long to int, could break the entire app but hey it works
                 MenuItem newItem = navMenu.add(R.id.nav_user_lists, (int) list.getListId(), 1, list.getListName());
                 newItem.setCheckable(true);
@@ -433,7 +456,8 @@ public class MainActivity extends AppCompatActivity {
                                 newItem.setIcon(R.drawable.ic_list_black_24dp);
                                 mDrawerLayout.openDrawer(Gravity.LEFT);
                             }
-                        }).show();
+                        })
+                        .negativeText("Cancel").show();
             }
         });
     }
@@ -458,13 +482,11 @@ public class MainActivity extends AppCompatActivity {
      *             hasSubMenu() on the item.
      */
     public void selectDrawerItem(MenuItem item) {
-        //Highlight selected item
-        if(item.isCheckable())
-            item.setChecked(true);
-        //Set the action bar title to item title
-        setTitle(item.getTitle());
         //If all tasks option is selected, load all tasks
-        if(item.getItemId() == R.id.nav_all_tasks_option) {
+        if (item.getItemId() == R.id.nav_all_tasks_option) {
+            if (item.isCheckable())
+                item.setChecked(true);
+            setTitle(item.getTitle());
             getDataProvider().loadAllTasks();
             //We create a completely new fragment in case the content frame has something other than a list
             //in it (like the settings page)
@@ -472,17 +494,40 @@ public class MainActivity extends AppCompatActivity {
                     FRAGMENT_TASK_LIST).commit();
         }
         //If uncategorized is selected, load all tasks where the parent list id is -1
-        else if(item.getItemId() == R.id.nav_uncategorized_tasks_option) {
+        else if (item.getItemId() == R.id.nav_uncategorized_tasks_option) {
+            if (item.isCheckable())
+                item.setChecked(true);
+            setTitle(item.getTitle());
             getDataProvider().loadUncategorizedTasks();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TaskRecyclerViewFragment(),
                     FRAGMENT_TASK_LIST).commit();
         }
         //If the item is one of the user's lists, load it from the database
-        else if(item.getGroupId() == R.id.nav_user_lists) {
+        else if (item.getGroupId() == R.id.nav_user_lists) {
+            if (item.isCheckable())
+                item.setChecked(true);
+            setTitle(item.getTitle());
             getDataProvider().loadTasksFromListWithId(item.getItemId());
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TaskRecyclerViewFragment(),
                     FRAGMENT_TASK_LIST).commit();
         }
+        else if(item.getItemId() == R.id.nav_settings_option) {
+            Snackbar s = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    "Sorry, settings is not implemented yet.",
+                    Snackbar.LENGTH_LONG
+            );
+            s.show();
+        }
+        else if(item.getItemId() == R.id.nav_feedback_option) {
+            Snackbar s = Snackbar.make(
+                    findViewById(R.id.main_content),
+                    "Sorry, feedback is not implemented yet.",
+                    Snackbar.LENGTH_LONG
+            );
+            s.show();
+        }
+
         //Close the nav drawer
         mDrawerLayout.closeDrawers();
     }
@@ -497,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.nav_drawer_toolbar);
         setSupportActionBar(mToolbar);
         //If the action bar exists, we set it to show the home button on the toolbar
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 

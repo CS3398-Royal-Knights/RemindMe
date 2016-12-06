@@ -118,6 +118,24 @@ public class TaskDataProvider {
         mLastRemovedPosition = position;
     }
 
+    public void replaceItemWithTask(int position, Task task) {
+        final Task removedTask = mData.remove(position);
+        removedTask.delete();
+        final Task newTask = task;
+        long newTaskParentListId = newTask.getParentListId();
+        if(mCurrLoadedList != null) {
+            if(mCurrLoadedList.getListId() == -1) {
+                mData.add(position, newTask);
+                task.save();
+            }
+            else if(mCurrLoadedList.getListId() == newTaskParentListId) {
+                mData.add(position, newTask);
+                task.save();
+            }
+        }
+        newTask.save();
+    }
+
     public List<Task> getTaskList(){
 
 

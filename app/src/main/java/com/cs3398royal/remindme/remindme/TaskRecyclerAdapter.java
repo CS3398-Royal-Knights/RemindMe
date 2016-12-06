@@ -4,6 +4,7 @@ import android.app.usage.UsageEvents;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +158,7 @@ public class TaskRecyclerAdapter
 
         //set task text
         holder.mTextView.setText(task.getTaskName());
-        //Set the text for the date, only show year if it's not due this year
+
         if(task.getDueDate() != null) {
             String dueDate;
             SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -165,6 +166,7 @@ public class TaskRecyclerAdapter
             Calendar now = Calendar.getInstance();
             dueDateCalendar.setTime(task.getDueDate());
             int year = dueDateCalendar.get(Calendar.YEAR);
+            //Set the text for the date, only show year if it's not due this year
             if(year != now.get(Calendar.YEAR)) {
                 formatter.applyLocalizedPattern("MMM dd, YYYY");
             }
@@ -173,7 +175,12 @@ public class TaskRecyclerAdapter
             }
             dueDate = formatter.format(dueDateCalendar.getTime());
             holder.mDateText.setText(dueDate);
+            //Set due date text to red if it's overdue
+            if(dueDateCalendar.before(now) && !DateUtils.isToday(dueDateCalendar.getTimeInMillis())) {
+                holder.mDateText.setTextColor(Color.parseColor("#E53935"));
+            }
         }
+
         //Set priority text
         switch(task.getTaskPriority()) {
             case 0:
