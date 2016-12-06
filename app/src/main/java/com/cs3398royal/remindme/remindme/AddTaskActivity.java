@@ -154,18 +154,17 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         String task = taskNameText.getText().toString();
-        if (task.trim().length() == 0) {
-            new MaterialDialog.Builder(this)
-                    .title("Whoops!")
-                    .content("The Task Name field can't be empty. Give your task a name and try again.")
-                    .positiveText("OK")
-                    .show();
-            return false;
-        }
         switch (id) {
             case R.id.action_add:
+                if (task.trim().length() == 0) {
+                    new MaterialDialog.Builder(this)
+                            .title("Whoops!")
+                            .content("The Task Name field can't be empty. Give your task a name and try again.")
+                            .positiveText("OK")
+                            .show();
+                    return false;
+                }
                 Task newTask = createTaskFromInputFields(task.trim());
                 Intent i = new Intent();
 
