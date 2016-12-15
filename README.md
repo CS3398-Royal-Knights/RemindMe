@@ -42,6 +42,7 @@ each other's code and ensure the team had a common goal each sprint.
 * Chris Foytek - Created the navigation slideout drawer, data provider for abstraction between database and UI code, and code for UI representation of tasks/lists.
 * Brian Fredrickson - Research, ideas, and moral support.
 * Jake Aguirre - Base calendar view implementation
+* Alex Rangel - Helped on the sort button and contribuited ideas to the devleopment of the app. 
 
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
