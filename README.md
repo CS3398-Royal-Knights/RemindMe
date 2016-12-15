@@ -45,6 +45,8 @@ each other's code and ensure the team had a common goal each sprint.
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
  * Switch from a local database to a web based database such as AWS.
- * View lists within each calendar view using parsels 
+ * View lists within each calendar view using parcels 
  * Enable push notifications for task dates and times
+ * Extend agile concepts of the project by implementing automated unit testing with a continuous integration service to further increase collaboration and lower deployment risk
+ * Enable rapid release of changes with continous deployment
  
