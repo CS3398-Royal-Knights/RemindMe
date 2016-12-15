@@ -41,7 +41,7 @@ each other's code and ensure the team had a common goal each sprint.
 * Brandon Claggett - Created the add task activity, added the add task FAB, implemented task sorting algorithms. 
 * Chris Foytek - Created the navigation slideout drawer, data provider for abstraction between database and UI code, and code for UI representation of tasks/lists.
 * Brian Fredrickson - Research, ideas, and moral support.
-
+* Jake Aguirre - Base calendar view implementation
 
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
