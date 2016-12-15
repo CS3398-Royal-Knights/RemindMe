@@ -36,9 +36,10 @@ each other's code and ensure the team had a common goal each sprint.
 
 
 ## The Project Contributors of RemindMe
-Taurino Tostado Jr - Splash Screen, helped with loading lists from the database and came up with creative ideas to design the app.
-Taylor Helton - Calendar Views, allowing users to view Month/Day/Week views.
-Brandon Claggett - Created the add task activity, added the add task FAB, implemented task sorting algorithms. 
+* Taurino Tostado Jr - Splash Screen, helped with loading lists from the database and came up with creative ideas to design the app.
+* Taylor Helton - Calendar Views, allowing users to view Month/Day/Week views.
+* Brandon Claggett - Created the add task activity, added the add task FAB, implemented task sorting algorithms. 
+* Chris Foytek - Created the navigation slideout drawer, data provider for abstraction between database and UI code, and code for UI representation of tasks/lists.
 
 
 ## Want to Contribute to the App?
