@@ -29,13 +29,21 @@ development of the app.
 * [Advanced Recycler View](https://github.com/h6ah4i/android-advancedrecyclerview), a library for Android RecyclerView that adds features such as swiping and Drag and Drop
 * [Material Dialogs](https://github.com/afollestad/material-dialogs), a library that condenses the creation of pop-up dialogs into a single function call
 
+## The Development Process 
+This app was created using the Agile Development process with two week sprints. This process aided in the rapid development of this app. 
+Biweekly standups were held to ensure progress was kept at a steady pace. Weekly team meetings helped team members in understanding
+each other's code and ensure the team had a common goal each sprint. 
+
+
 ## The Project Contributors of RemindMe
 Taurino Tostado Jr - Splash Screen, helped with loading lists from the database and came up with creative ideas to design the app.
 Taylor Helton - Calendar Views, allowing users to view Month/Day/Week views.
+Brandon Claggett - Created the add task activity, added the add task FAB, implemented task sorting algorithms. 
 
 
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
  * Switch from a local database to a web based database such as AWS.
  * View lists within each calendar view using parsels 
+ * Enable push notifications for task dates and times
  
