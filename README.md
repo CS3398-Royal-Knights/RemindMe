@@ -31,9 +31,11 @@ development of the app.
 
 ## The Project Contributors of RemindMe
 Taurino Tostado Jr - Splash Screen, helped with loading lists from the database and came up with creative ideas to design the app.
+Taylor Helton - Calendar Views, allowing users to view Month/Day/Week views.
 
 
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
  * Switch from a local database to a web based database such as AWS.
+ * View lists within each calendar view using parsels 
  
