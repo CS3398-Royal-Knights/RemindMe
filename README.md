@@ -42,12 +42,13 @@ each other's code and ensure the team had a common goal each sprint.
 * Chris Foytek - Created the navigation slideout drawer, data provider for abstraction between database and UI code, and code for UI representation of tasks/lists.
 * Brian Fredrickson - Research, ideas, and moral support.
 * Jake Aguirre - Base calendar view implementation
-* Alex Rangel - Helped on the sort button and contribuited ideas to the devleopment of the app. 
+* Alex Rangel - Helped on the sort button and contributed ideas to the development of the app. 
 
 ## Want to Contribute to the App?
  Here are some ideas that the team wanted to integrate in to the app:
  * Switch from a local database to a web based database such as AWS.
  * View lists within each calendar view using parcels 
+ * Using a web based database to allow synchronization to other android devices.
  * Enable push notifications for task dates and times
  * Extend agile concepts of the project by implementing automated unit testing with a continuous integration service to further increase collaboration and lower deployment risk
  * Enable rapid release of changes with continous deployment
