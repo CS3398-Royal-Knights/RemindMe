@@ -28,3 +28,12 @@ development of the app.
 * [DBFlow](https://github.com/Raizlabs/DBFlow), an Object Relational Management library that uses Java annotations to make creating and managing databases in Android simple
 * [Advanced Recycler View](https://github.com/h6ah4i/android-advancedrecyclerview), a library for Android RecyclerView that adds features such as swiping and Drag and Drop
 * [Material Dialogs](https://github.com/afollestad/material-dialogs), a library that condenses the creation of pop-up dialogs into a single function call
+
+## The Project Contributors of RemindMe
+Taurino Tostado Jr - Splash Screen, helped with loading lists from the database and came up with creative ideas to design the app.
+
+
+## Want to Contribute to the App?
+ Here are some ideas that the team wanted to integrate in to the app:
+ * Switch from a local database to a web based database such as AWS.
+ 
